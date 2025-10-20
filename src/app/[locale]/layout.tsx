@@ -34,7 +34,8 @@ export default async function RootLayout({ children, params }: Props) {
     notFound();
   }
 
-  // Enable static rendering
+
+
   setRequestLocale(locale);
 
   return (

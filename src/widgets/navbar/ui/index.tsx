@@ -1,3 +1,7 @@
+"use client"
+
+import { useEffect, useState } from 'react';
+
 import { Accordion } from '@/shared/ui/accordion';
 import { Button } from '@/shared/ui/button';
 import {
@@ -17,12 +21,25 @@ import { PRODUCT_INFO } from '@/shared/constants/data';
 import RenderMenuItem from './RenderItem';
 import RenderMobileMenuItem from './RenderMobileMenuItem';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
+  const [isHide, setIsHide] = useState<boolean>(false);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if(pathname.includes('register') || pathname.includes("login")) {
+      setIsHide(true)
+    }
+  }, [pathname])
+
   const auth = {
     login: { title: 'Kirish', url: '/login' },
-    signup: { title: "Ro'yhatdan o'tish", url: '/signup' },
+    signup: { title: "Ro'yhatdan o'tish", url: '/register' },
   };
+
+  if(isHide) return;
 
   return (
     <section className="py-4">

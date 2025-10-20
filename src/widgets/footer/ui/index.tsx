@@ -1,7 +1,23 @@
+"use client"
+
+import { useEffect, useState } from 'react';
 import { sections } from '../lib/data';
 import { InstagramIcon, YoutubeIcon, SendIcon } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
+  const [isHide, setIsHide] = useState<boolean>(false);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if(pathname.includes('register') || pathname.includes("login")) {
+      setIsHide(true)
+    }
+  }, [pathname])
+
+  if(isHide) return;
+
   return (
     <footer className="bg-[#0d0d0d] text-white py-16 border-t border-[#1f1f1f]">
       <div className="custom-container">

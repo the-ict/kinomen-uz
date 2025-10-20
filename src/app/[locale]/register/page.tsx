@@ -1,10 +1,10 @@
+import Register from '@/features/register/ui'
 import React from 'react'
-import Analyses from "@/features/analyses/ui"
 
 export default function page() {
   return (
     <div>
-      <Analyses />
+        <Register />
     </div>
   )
 }
