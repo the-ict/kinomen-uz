@@ -1,63 +1,52 @@
-import { PRODUCT_INFO } from '@/shared/constants/data';
-import { InstagramIcon, YoutubeIcon } from 'lucide-react';
 import { sections } from '../lib/data';
-import { ModeToggle } from '@/shared/ui/theme-toggle';
+import { InstagramIcon, YoutubeIcon, SendIcon } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <section className="py-32">
+    <footer className="bg-[#0d0d0d] text-white py-16 border-t border-[#1f1f1f]">
       <div className="custom-container">
-        <div className="flex w-full flex-col items-center justify-between gap-10 text-center lg:flex-row lg:items-start lg:text-left">
-          <div className="flex w-full flex-col items-center justify-between gap-6 lg:items-start">
-            {/* Logo */}
-            <div className="flex items-center gap-2 lg:justify-start">
-              <a href="https://shadcnblocks.com">
-                <img
-                  src={PRODUCT_INFO.logo}
-                  alt={PRODUCT_INFO.name}
-                  title={PRODUCT_INFO.name}
-                  className="h-8"
-                />
-              </a>
-              <h2 className="text-xl font-semibold">{PRODUCT_INFO.name}</h2>
+        <div className="flex flex-col lg:flex-row justify-between gap-10">
+          <div className="flex flex-col gap-6 max-w-sm">
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-semibold tracking-wide">
+                Kinomen<span className="text-[#e50914]">.uz</span>
+              </h2>
             </div>
-            <p className="text-sm text-muted-foreground">
-              A collection of 100+ responsive HTML templates for your startup
-              business or side project.
+            <p className="text-sm text-gray-400 leading-relaxed">
+              Kinomen — bu joy, bu yerda siz sevimli filmlaringiz haqida fikr
+              almashasiz, baho berasiz va yangi kinolarni kashf etasiz. 🎬
             </p>
-            <ul className="flex items-center space-x-6 text-muted-foreground">
-              <li className="font-medium hover:text-primary">
+
+            <ul className="flex items-center gap-6 text-gray-400">
+              <li className="hover:text-[#e50914] transition">
                 <a href="#">
-                  <InstagramIcon className="size-6" />
+                  <InstagramIcon className="size-5" />
                 </a>
               </li>
-              <li className="font-medium hover:text-primary">
+              <li className="hover:text-[#e50914] transition">
                 <a href="#">
-                  <YoutubeIcon className="size-6" />
+                  <YoutubeIcon className="size-5" />
                 </a>
               </li>
-              <li className="font-medium hover:text-primary">
+              <li className="hover:text-[#e50914] transition">
                 <a href="#">
-                  <InstagramIcon className="size-6" />
-                </a>
-              </li>
-              <li className="font-medium hover:text-primary">
-                <a href="#">
-                  <InstagramIcon className="size-6" />
+                  <SendIcon className="size-5" />
                 </a>
               </li>
             </ul>
-            <ModeToggle />
           </div>
-          <div className="grid w-full grid-cols-3 gap-6 lg:gap-20">
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
             {sections.map((section, sectionIdx) => (
               <div key={sectionIdx}>
-                <h3 className="mb-6 font-bold">{section.title}</h3>
-                <ul className="space-y-4 text-sm text-muted-foreground">
+                <h3 className="mb-4 font-semibold text-white text-lg">
+                  {section.title}
+                </h3>
+                <ul className="space-y-3 text-gray-400">
                   {section.links.map((link, linkIdx) => (
                     <li
                       key={linkIdx}
-                      className="font-medium hover:text-primary"
+                      className="hover:text-[#e50914] transition-colors"
                     >
                       <a href={link.href}>{link.name}</a>
                     </li>
@@ -67,19 +56,24 @@ const Footer = () => {
             ))}
           </div>
         </div>
-        <div className="mt-8 flex flex-col justify-between gap-4 border-t pt-8 text-center text-sm font-medium text-muted-foreground lg:flex-row lg:items-center lg:text-left">
+
+        {/* Pastki qism */}
+        <div className="mt-12 border-t border-[#1f1f1f] pt-6 flex flex-col lg:flex-row justify-between items-center text-sm text-gray-500">
           <p>
-            © {new Date().getFullYear()} {PRODUCT_INFO.creator}. All rights
-            reserved.
+            © {new Date().getFullYear()} Kinomen.uz — Barcha huquqlar
+            himoyalangan.
           </p>
-          <ul className="flex justify-center gap-4 lg:justify-start">
-            <li className="hover:text-primary">
-              <a href={PRODUCT_INFO.terms_of_use}>Terms and Conditions</a>
-            </li>
-          </ul>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-[#e50914]">
+              Maxfiylik siyosati
+            </a>
+            <a href="#" className="hover:text-[#e50914]">
+              Foydalanish shartlari
+            </a>
+          </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 };
 

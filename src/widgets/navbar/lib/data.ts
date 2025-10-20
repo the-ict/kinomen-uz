@@ -1,77 +1,100 @@
-import { Book, Sunset, Trees, Zap } from 'lucide-react';
+import {
+  Film,
+  Star,
+  Users,
+  BookOpen,
+  HelpCircle,
+  MessageSquare,
+  Info,
+  LogIn,
+  Clapperboard,
+  Sparkles,
+} from 'lucide-react';
 import { MenuItem } from './model';
 import { LanguageRoutes } from '@/shared/config/i18n/types';
 
 const menu: MenuItem[] = [
-  { title: 'Home', url: '#' },
   {
-    title: 'Products',
+    title: 'Bosh sahifa',
+    url: '/',
+  },
+  {
+    title: 'Filmlar',
     url: '#',
     items: [
       {
-        title: 'Blog',
-        description: 'The latest industry news, updates, and info',
-        icon: Book,
-        url: '#',
+        title: 'Ommabop filmlar',
+        description: 'Hozir eng ko‘p muhokama qilinayotgan kinolar',
+        icon: Star,
+        url: '/movies?sort=popular',
       },
       {
-        title: 'Company',
-        description: 'Our mission is to innovate and empower the world',
-        icon: Trees,
-        url: '#',
+        title: 'Yangi chiqqanlar',
+        description: 'Yangi premyeralar va yaqinda qo‘shilgan filmlar',
+        icon: Clapperboard,
+        url: '/movies?sort=new',
       },
       {
-        title: 'Careers',
-        description: 'Browse job listing and discover our workspace',
-        icon: Sunset,
-        url: '#',
+        title: 'Eng yuqori baholangan',
+        description: 'Foydalanuvchilar reytingi bo‘yicha top 100 film',
+        icon: Sparkles,
+        url: '/movies?sort=most_rated',
       },
       {
-        title: 'Support',
-        description:
-          'Get in touch with our support team or visit our community forums',
-        icon: Zap,
-        url: '#',
+        title: 'Filtrlash',
+        description: 'Drama, fantastika, komediya va boshqa toifalar',
+        icon: Film,
+        url: '/movies?sort=genre',
       },
     ],
-  },
-  {
-    title: 'Resources',
-    url: '#',
-    items: [
-      {
-        title: 'Help Center',
-        description: 'Get all the answers you need right here',
-        icon: Zap,
-        url: '#',
-      },
-      {
-        title: 'Contact Us',
-        description: 'We are here to help you with any questions you have',
-        icon: Sunset,
-        url: '#',
-      },
-      {
-        title: 'Status',
-        description: 'Check the current status of our services and APIs',
-        icon: Trees,
-        url: '#',
-      },
-      {
-        title: 'Terms of Service',
-        description: 'Our terms and conditions for using our services',
-        icon: Book,
-        url: '#',
-      },
-    ],
-  },
-  {
-    title: 'Pricing',
-    url: '#',
   },
   {
     title: 'Blog',
     url: '#',
+    items: [
+      {
+        title: 'Tahlillar',
+        description: 'Kino olamidagi chuqur tahlillar va maqolalar',
+        icon: BookOpen,
+        url: '/analyses',
+      },
+      {
+        title: 'Yangiliklar',
+        description: 'So‘nggi kino yangiliklari va intervyular',
+        icon: Info,
+        url: '/blog/news',
+      },
+      {
+        title: 'Reytinglar',
+        description: 'Kinomen jamoasi tuzgan maxsus top ro‘yxatlar',
+        icon: Star,
+        url: '/blog/top-lists',
+      },
+    ],
+  },
+  {
+    title: 'Yordam',
+    url: '#',
+    items: [
+      {
+        title: 'Savol-javoblar',
+        description: 'Ko‘p so‘raladigan savollarga javoblar',
+        icon: HelpCircle,
+        url: '/help/faq',
+      },
+      {
+        title: 'Qo‘llab-quvvatlash',
+        description: 'Bizga murojaat qiling yoki xabar yuboring',
+        icon: MessageSquare,
+        url: '/help/support',
+      },
+      {
+        title: 'Shartlar va siyosat',
+        description: 'Platformadan foydalanish qoidalari',
+        icon: Info,
+        url: '/help/terms',
+      },
+    ],
   },
 ];
 

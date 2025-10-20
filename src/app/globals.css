@@ -79,7 +79,7 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
+  --background: #0d0d0d;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
   --card-foreground: oklch(0.985 0 0);
@@ -124,5 +124,24 @@
 @layer components {
   .custom-container {
     @apply container px-4 mx-auto;
+  }
+}
+
+.reminder {
+  animation-name: reminder;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes reminder {
+  0% {
+    opacity: 0%;
+    transform: translateY(100vh);
+  }
+
+  100% {
+    opacity: 100%;
+    transform: translateY(0);
   }
 }

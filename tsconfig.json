@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "prettier.config.cjs"
-  ],
+, "src/widgets/features-cards/ui/index.tsx"  ],
   "exclude": ["node_modules"]
 }

@@ -1,31 +1,29 @@
-const sections = [
+export const sections = [
   {
-    title: 'Product',
+    title: 'Filmlar',
     links: [
-      { name: 'Overview', href: '#' },
-      { name: 'Pricing', href: '#' },
-      { name: 'Marketplace', href: '#' },
-      { name: 'Features', href: '#' },
+      { name: 'Trenddagi filmlar', href: '/film' },
+      { name: 'Yangi chiqishlar', href: '#' },
+      { name: 'Eng yuqori baholangan', href: '#' },
+      { name: 'Janrlar', href: '#' },
     ],
   },
   {
-    title: 'Company',
+    title: 'Hamjamiyat',
     links: [
-      { name: 'About', href: '#' },
-      { name: 'Team', href: '#' },
-      { name: 'Blog', href: '#' },
-      { name: 'Careers', href: '#' },
+      { name: 'Munozaralar', href: '#' },
+      { name: 'Sharhlar', href: '#' },
+      { name: 'Fan klublar', href: '#' },
+      { name: 'Tadbirlar', href: '#' },
     ],
   },
   {
-    title: 'Resources',
+    title: 'Maʼlumot',
     links: [
-      { name: 'Help', href: '#' },
-      { name: 'Sales', href: '#' },
-      { name: 'Advertise', href: '#' },
-      { name: 'Privacy', href: '#' },
+      { name: 'Biz haqimizda', href: '#' },
+      { name: 'Jamoa', href: '#' },
+      { name: 'OAV uchun', href: '#' },
+      { name: 'Aloqa', href: '#' },
     ],
   },
 ];
-
-export { sections };
