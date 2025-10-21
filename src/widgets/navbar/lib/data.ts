@@ -15,10 +15,6 @@ import { LanguageRoutes } from '@/shared/config/i18n/types';
 
 const menu: MenuItem[] = [
   {
-    title: 'Bosh sahifa',
-    url: '/',
-  },
-  {
     title: 'Filmlar',
     url: '#',
     items: [
@@ -94,9 +90,30 @@ const menu: MenuItem[] = [
         icon: Info,
         url: '/help/terms',
       },
+      {
+        title: 'Maxfiylik siyosati',
+        description: 'Shaxsiy ma\'lumotlarning himoya qoidalari',
+        icon: Info,
+        url: '/help/policy',
+      },
     ],
   },
 ];
+
+const authedMenu: MenuItem[] = [
+  {
+    title: "Yoqtirganlarim",
+    url: "/favorites",
+  },
+  {
+    title: "Watch-list",
+    url: "/watch-list"
+  },
+  {
+    title: "Tahlil yaratish",
+    url: "/create-analysis"
+  }
+]
 
 const languages: { name: string; key: LanguageRoutes }[] = [
   {
@@ -113,4 +130,4 @@ const languages: { name: string; key: LanguageRoutes }[] = [
   },
 ];
 
-export { menu, languages };
+export { menu, languages,authedMenu };

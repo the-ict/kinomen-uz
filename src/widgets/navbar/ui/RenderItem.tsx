@@ -7,12 +7,17 @@ import {
 import { MenuItem } from '../lib/model';
 import SubMenuLink from './SubMenuLink';
 
-const RenderMenuItem = (item: MenuItem) => {
+interface RenderMenuProps {
+  item: MenuItem;
+  isScrolled: boolean;
+}
+
+const RenderMenuItem = ({ item, isScrolled }: RenderMenuProps) => {
   if (item.items) {
     return (
       <NavigationMenuItem key={item.title}>
-        <NavigationMenuTrigger className='cursor-pointer'>{item.title}</NavigationMenuTrigger>
-        <NavigationMenuContent className="bg-popover text-popover-foreground">
+        <NavigationMenuTrigger className={`cursor-pointer ${isScrolled && "text-white"}`}>{item.title}</NavigationMenuTrigger>
+        <NavigationMenuContent className={`bg-popover text-popover-foreground`}>
           {item.items.map((subItem) => (
             <NavigationMenuLink asChild key={subItem.title} className="w-80">
               <SubMenuLink item={subItem} />

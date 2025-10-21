@@ -16,15 +16,17 @@ import {
   SheetTrigger,
 } from '@/shared/ui/sheet';
 import { Menu } from 'lucide-react';
-import { menu } from '../lib/data';
+import { authedMenu, menu } from '../lib/data';
 import { PRODUCT_INFO } from '@/shared/constants/data';
 import RenderMenuItem from './RenderItem';
 import RenderMobileMenuItem from './RenderMobileMenuItem';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { cn } from '@/shared/lib/utils';
 
 const Navbar = () => {
   const [isHide, setIsHide] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   const pathname = usePathname();
 
@@ -34,6 +36,22 @@ const Navbar = () => {
     }
   }, [pathname])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const auth = {
     login: { title: 'Kirish', url: '/login' },
     signup: { title: "Ro'yhatdan o'tish", url: '/register' },
@@ -42,10 +60,10 @@ const Navbar = () => {
   if(isHide) return;
 
   return (
-    <section className="py-4">
+    <section className={cn("py-4 sticky top-0 z-50 transition duration-200", isScrolled ? "bg-white/10 backdrop-blur-sm" : "")}>
       <div className="custom-container">
         <nav className="hidden justify-between lg:flex">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
             <Link href={'/'} className="flex items-center gap-2">
               <span className="text-xl font-semibold tracking-tighter">
                 {PRODUCT_INFO.name}
@@ -54,7 +72,15 @@ const Navbar = () => {
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
-                  {menu.map((item) => RenderMenuItem(item))}
+                  {menu.map((item) => RenderMenuItem({item, isScrolled}))}
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
+
+            <div className='flex items-center'>
+              <NavigationMenu>
+                <NavigationMenuList>
+                  {authedMenu.map(item => RenderMenuItem({item,isScrolled}))}
                 </NavigationMenuList>
               </NavigationMenu>
             </div>

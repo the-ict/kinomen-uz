@@ -1,5 +1,4 @@
 import React from 'react';
-import AnalysesCard from './AnalysesCard';
 import AnalysesListCard from './AnalysesListCard';
 import Followings from './Followings';
 
