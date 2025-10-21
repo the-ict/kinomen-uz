@@ -105,11 +105,9 @@ const Navbar = () => {
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             <Link href={'/'} className="flex items-center gap-2">
-              <img
-                src={PRODUCT_INFO.logo}
-                className="max-h-8"
-                alt={PRODUCT_INFO.name}
-              />
+             <span className="text-xl font-semibold tracking-tighter">
+                {PRODUCT_INFO.name}
+              </span>
             </Link>
             <Sheet>
               <div className="space-x-2">
@@ -123,11 +121,9 @@ const Navbar = () => {
                 <SheetHeader>
                   <SheetTitle>
                     <Link href={'/'} className="flex items-center gap-2">
-                      <img
-                        src={PRODUCT_INFO.logo}
-                        className="max-h-8"
-                        alt={PRODUCT_INFO.name}
-                      />
+                   <span className="text-xl font-semibold tracking-tighter">
+                {PRODUCT_INFO.name}
+              </span>
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
