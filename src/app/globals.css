@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -144,4 +143,44 @@
     opacity: 100%;
     transform: translateY(0);
   }
+}
+
+
+.CodeMirror {
+  background-color: #0f0f0f !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.CodeMirror-cursor {
+  border-left: 2px solid #e50914 !important; /* Netflix red cursor */
+}
+
+.CodeMirror-gutters {
+  background-color: #0f0f0f !important;
+  border-right: none !important;
+}
+
+.editor-toolbar {
+  background-color: #161616 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.editor-toolbar button {
+  color: #ccc !important;
+}
+
+.editor-toolbar button:hover {
+  color: #e50914 !important;
+}
+
+.EasyMDEContainer {
+  border-radius: 12px !important;
+  overflow: hidden;
 }
