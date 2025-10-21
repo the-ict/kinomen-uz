@@ -99,7 +99,7 @@ export default function MoviesPage() {
     { value: 'most_rated', label: 'Eng yaxshi baholangani' },
     { value: 'most_viewed', label: "Eng ko'p ko'rilgani" },
   ];
-  const [rating, setRating] = useState<number>(6)
+  const [rating, setRating] = useState<number>(6);
 
   const mockMovies = [
     {
@@ -306,14 +306,15 @@ export default function MoviesPage() {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent>
-                    {
-                        [5,6,7,8,9,10].map(rating => (
-                            <DropdownMenuItem className='flex items-center gap-2 cursor-pointer hover:bg-gray-700' onClick={() => setRating(rating)}>
-                               <Star size={16}/>
-                               <span>{rating}</span>
-                            </DropdownMenuItem>
-                        )) 
-                    }
+                  {[5, 6, 7, 8, 9, 10].map((rating) => (
+                    <DropdownMenuItem
+                      className="flex items-center gap-2 cursor-pointer hover:bg-gray-700"
+                      onClick={() => setRating(rating)}
+                    >
+                      <Star size={16} />
+                      <span>{rating}</span>
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

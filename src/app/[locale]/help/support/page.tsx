@@ -9,23 +9,34 @@ export default function SupportPage() {
           Yordam Markazi
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
           <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
             <h2 className="text-2xl font-semibold mb-6 text-slate-800 dark:text-slate-200">
               Aloqa ma’lumotlari
             </h2>
             <div className="space-y-4">
               <div>
-                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">Email:</p>
-                <p className="text-slate-600 dark:text-slate-400">support@kinomen.com</p>
+                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
+                  Email:
+                </p>
+                <p className="text-slate-600 dark:text-slate-400">
+                  support@kinomen.com
+                </p>
               </div>
               <div>
-                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">Telefon:</p>
-                <p className="text-slate-600 dark:text-slate-400">+1 (555) 123-4567</p>
+                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
+                  Telefon:
+                </p>
+                <p className="text-slate-600 dark:text-slate-400">
+                  +1 (555) 123-4567
+                </p>
               </div>
               <div>
-                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">Ish vaqti:</p>
-                <p className="text-slate-600 dark:text-slate-400">Dush–Juma, 09:00 — 18:00 (UTC)</p>
+                <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
+                  Ish vaqti:
+                </p>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Dush–Juma, 09:00 — 18:00 (UTC)
+                </p>
               </div>
             </div>
           </div>
@@ -46,7 +57,6 @@ export default function SupportPage() {
               </Button>
             </div>
           </div>
-
         </div>
       </div>
     </div>

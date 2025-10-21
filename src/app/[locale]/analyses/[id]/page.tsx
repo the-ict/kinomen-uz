@@ -1,7 +1,8 @@
-import React from 'react'
+import React from "react"
+import SingleAnalyses from "@/features/single-analyses/ui"
 
 export default function page() {
   return (
-    <div>page</div>
+    <SingleAnalyses />
   )
 }

@@ -13,11 +13,14 @@ interface RenderMenuProps {
 }
 
 const RenderMenuItem = ({ item, isScrolled }: RenderMenuProps) => {
-
   if (item.items) {
     return (
       <NavigationMenuItem key={item.title}>
-        <NavigationMenuTrigger className={`cursor-pointer ${isScrolled && "text-white bg-transparent"}`}>{item.title}</NavigationMenuTrigger>
+        <NavigationMenuTrigger
+          className={`cursor-pointer ${isScrolled && 'text-white bg-transparent'}`}
+        >
+          {item.title}
+        </NavigationMenuTrigger>
         <NavigationMenuContent className={`bg-popover text-popover-foreground`}>
           {item.items.map((subItem) => (
             <NavigationMenuLink asChild key={subItem.title} className="w-80">
@@ -33,7 +36,7 @@ const RenderMenuItem = ({ item, isScrolled }: RenderMenuProps) => {
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         href={item.url}
-        className={`group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground ${isScrolled && "text-white bg-transparent"}`}
+        className={`group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground ${isScrolled && 'text-white bg-transparent'}`}
       >
         {item.title}
       </NavigationMenuLink>

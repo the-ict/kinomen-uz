@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -31,10 +31,10 @@ const Navbar = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if(pathname.includes('register') || pathname.includes("login")) {
-      setIsHide(true)
+    if (pathname.includes('register') || pathname.includes('login')) {
+      setIsHide(true);
     }
-  }, [pathname])
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,10 +57,15 @@ const Navbar = () => {
     signup: { title: "Ro'yhatdan o'tish", url: '/register' },
   };
 
-  if(isHide) return;
+  if (isHide) return;
 
   return (
-    <section className={cn("py-4 sticky top-0 z-50 transition duration-200", isScrolled ? "bg-white/10 backdrop-blur-sm" : "")}>
+    <section
+      className={cn(
+        'py-4 sticky top-0 z-50 transition duration-200',
+        isScrolled ? 'bg-white/10 backdrop-blur-sm' : '',
+      )}
+    >
       <div className="custom-container">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-2">
@@ -72,15 +77,17 @@ const Navbar = () => {
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
-                  {menu.map((item) => RenderMenuItem({item, isScrolled}))}
+                  {menu.map((item) => RenderMenuItem({ item, isScrolled }))}
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
 
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
-                  {authedMenu.map(item => RenderMenuItem({item,isScrolled}))}
+                  {authedMenu.map((item) =>
+                    RenderMenuItem({ item, isScrolled }),
+                  )}
                 </NavigationMenuList>
               </NavigationMenu>
             </div>

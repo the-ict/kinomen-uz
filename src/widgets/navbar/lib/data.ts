@@ -92,7 +92,7 @@ const menu: MenuItem[] = [
       },
       {
         title: 'Maxfiylik siyosati',
-        description: 'Shaxsiy ma\'lumotlarning himoya qoidalari',
+        description: "Shaxsiy ma'lumotlarning himoya qoidalari",
         icon: Info,
         url: '/help/policy',
       },
@@ -102,18 +102,18 @@ const menu: MenuItem[] = [
 
 const authedMenu: MenuItem[] = [
   {
-    title: "Yoqtirganlarim",
-    url: "/favorites",
+    title: 'Yoqtirganlarim',
+    url: '/favorites',
   },
   {
-    title: "Watch-list",
-    url: "/watch-list"
+    title: 'Watch-list',
+    url: '/watchlist',
   },
   {
-    title: "Tahlil yaratish",
-    url: "/create-analysis"
-  }
-]
+    title: 'Tahlil yaratish',
+    url: '/create-analyses',
+  },
+];
 
 const languages: { name: string; key: LanguageRoutes }[] = [
   {
@@ -130,4 +130,4 @@ const languages: { name: string; key: LanguageRoutes }[] = [
   },
 ];
 
-export { menu, languages,authedMenu };
+export { menu, languages, authedMenu };

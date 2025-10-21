@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useEffect, useState } from 'react';
 import { sections } from '../lib/data';
@@ -11,12 +11,12 @@ const Footer = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if(pathname.includes('register') || pathname.includes("login")) {
-      setIsHide(true)
+    if (pathname.includes('register') || pathname.includes('login')) {
+      setIsHide(true);
     }
-  }, [pathname])
+  }, [pathname]);
 
-  if(isHide) return;
+  if (isHide) return;
 
   return (
     <footer className="bg-[#0d0d0d] text-white py-16 border-t border-[#1f1f1f]">

@@ -6,7 +6,6 @@ import { HeartHandshake, User, MessageCircle, Eye } from 'lucide-react';
 export default function AnalysesListCard() {
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-[#161616] border border-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.08)] transition-all duration-300 cursor-pointer">
-      
       <div className="relative w-full h-[250px]">
         <Image
           src={AnalysisCardImage.src}
@@ -18,7 +17,6 @@ export default function AnalysesListCard() {
       </div>
 
       <div className="p-5 flex flex-col gap-3">
-        
         <div className="flex items-center gap-2 text-sm text-gray-400">
           <User className="w-5 h-5 text-gray-400" />
           <span>@the_ict</span>
