@@ -1,0 +1,26 @@
+import httpClient from "../httpClient"
+import { POSTS } from "../URLs"
+import { PostBodyModel } from "./posts.model";
+
+const post_requests = {
+    getAll: async() =>{
+        return (await httpClient.get(POSTS)).data;
+    },
+    getSinglePost: async(id: number) => {
+        return (await httpClient.get(POSTS + id)).data;
+    },
+    createPost: async(body: PostBodyModel) => {
+        return (await httpClient.post(POSTS, body)).data;
+    },
+    updatePost: async(id: number, body: PostBodyModel) => {
+        return (await httpClient.put(POSTS + id, body)).data;
+    },
+    deletePost: async(id: number) => {
+        return (await httpClient.delete(POSTS + id)).data;
+    },
+    likePost: async(id: number) => {
+        return (await httpClient.post(POSTS + id + "/like")).data;
+    }
+}
+
+export {post_requests}

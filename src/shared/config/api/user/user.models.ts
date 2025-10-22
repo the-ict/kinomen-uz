@@ -16,3 +16,19 @@ export interface UserBodyModels {
   coverImage?: string;
   imageUrl?: string;
 }
+
+export interface UpdateBodyModel {
+    email?: string;
+  username?: string;
+  password?: string;
+  name?: string;
+  about?: string;
+  posts?: PostBodyModel[];
+  comments?: CommentBodyModel[];
+  followers?: string[];
+  followings?: string[];
+  liked?: string[];
+  watchlist?: string[];
+  coverImage?: string;
+  imageUrl?: string;
+}

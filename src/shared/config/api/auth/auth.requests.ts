@@ -1,4 +1,5 @@
 import httpClient from '../httpClient';
+import { LOGIN, REGISTER } from '../URLs';
 import {
   LoginBodyModel,
   LoginResponseModel,
@@ -8,10 +9,10 @@ import {
 
 const auth_requests = {
   login: async (body: LoginBodyModel): Promise<LoginResponseModel> => {
-    return (await httpClient.post('/auth/login', body)).data;
+    return (await httpClient.post(LOGIN, body)).data;
   },
   register: async (body: RegisterBodyModel): Promise<RegisterResponseModel> => {
-    return (await httpClient.post('/auth/register', body)).data;
+    return (await httpClient.post(REGISTER, body)).data;
   },
 };
 

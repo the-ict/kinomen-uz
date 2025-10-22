@@ -9,3 +9,8 @@ export interface PostBodyModel {
     view: string[];
     imageUrl?: string;
 }
+
+export interface PostResponseModel {
+    
+}
+
