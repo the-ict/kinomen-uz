@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Accordion } from '@/shared/ui/accordion';
 import { Button } from '@/shared/ui/button';
+import ProfilePicture from '../../../../public/pp.jpg';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -23,12 +24,15 @@ import RenderMobileMenuItem from './RenderMobileMenuItem';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
+import { useStore } from '@/shared/store';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isHide, setIsHide] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   const pathname = usePathname();
+  const userStore = useStore();
 
   useEffect(() => {
     if (pathname.includes('register') || pathname.includes('login')) {
@@ -92,20 +96,32 @@ const Navbar = () => {
               </NavigationMenu>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button asChild variant="outline">
-              <Link href={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild>
-              <Link href={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
-          </div>
+          {!userStore.token ? (
+            <div className="flex gap-2">
+              <Button asChild variant="outline">
+                <Link href={auth.login.url}>{auth.login.title}</Link>
+              </Button>
+              <Button asChild>
+                <Link href={auth.signup.url}>{auth.signup.title}</Link>
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Image
+                src={ProfilePicture}
+                alt="What up"
+                width={50}
+                height={50}
+                className="rounded-full object-cover cursor-pointer"
+              />
+            </div>
+          )}
         </nav>
 
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             <Link href={'/'} className="flex items-center gap-2">
-             <span className="text-xl font-semibold tracking-tighter">
+              <span className="text-xl font-semibold tracking-tighter">
                 {PRODUCT_INFO.name}
               </span>
             </Link>
@@ -121,9 +137,9 @@ const Navbar = () => {
                 <SheetHeader>
                   <SheetTitle>
                     <Link href={'/'} className="flex items-center gap-2">
-                   <span className="text-xl font-semibold tracking-tighter">
-                {PRODUCT_INFO.name}
-              </span>
+                      <span className="text-xl font-semibold tracking-tighter">
+                        {PRODUCT_INFO.name}
+                      </span>
                     </Link>
                   </SheetTitle>
                 </SheetHeader>

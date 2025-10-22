@@ -13,7 +13,6 @@ httpClient.interceptors.request.use(
   async (config) => {
     console.log(`API REQUEST to ${config.url}`, config);
 
-    // Language configs
     let language = LanguageRoutes.UZ;
     try {
       language = (await getLocale()) as LanguageRoutes;
@@ -23,10 +22,6 @@ httpClient.interceptors.request.use(
     }
 
     config.headers['Accept-Language'] = language;
-    // const accessToken = localStorage.getItem('accessToken');
-    // if (accessToken) {
-    //   config.headers['Authorization'] = `Bearer ${accessToken}`;
-    // }
 
     return config;
   },
