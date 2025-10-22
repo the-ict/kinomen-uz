@@ -54,18 +54,6 @@ const menu: MenuItem[] = [
         icon: BookOpen,
         url: '/analyses',
       },
-      {
-        title: 'Yangiliklar',
-        description: 'So‘nggi kino yangiliklari va intervyular',
-        icon: Info,
-        url: '/blog/news',
-      },
-      {
-        title: 'Reytinglar',
-        description: 'Kinomen jamoasi tuzgan maxsus top ro‘yxatlar',
-        icon: Star,
-        url: '/blog/top-lists',
-      },
     ],
   },
   {

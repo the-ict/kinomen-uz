@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import TextAlign from '@tiptap/extension-text-align';
+import Highlight from '@tiptap/extension-highlight';
+import { useEditor, EditorContent } from '@tiptap/react';
 import { Button } from '@/shared/ui/button';
+import StarterKit from '@tiptap/starter-kit';
 import { Input } from '@/shared/ui/input';
-import {useEditor,EditorContent} from "@tiptap/react"
-import StarterKit from "@tiptap/starter-kit"
-import TextAlign from "@tiptap/extension-text-align"
-import Highlight from "@tiptap/extension-highlight"
+import React, { useState } from 'react';
 import MenuBar from './menu-bar';
 
 export default function CreateAnalysisPage() {
@@ -16,21 +16,26 @@ export default function CreateAnalysisPage() {
   const [rating, setRating] = useState(0);
 
   const editor = useEditor({
-    extensions: [StarterKit, TextAlign.configure({
-      types: ['heading', 'paragraph'],
-    }), Highlight],
-    content: "Xoxlaganingizcha sharx yozing !",
+    extensions: [
+      StarterKit,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Highlight,
+    ],
+    content: 'Xoxlaganingizcha sharx yozing !',
     immediatelyRender: true,
     onUpdate: (content) => {
       setContent(content.editor.getHTML());
-      console.log("Content:   ",content.editor.getHTML());
+      console.log('Content:   ', content.editor.getHTML());
     },
     editorProps: {
       attributes: {
-        class: "border-2 border-[#333] min-h-[150px] max-h-[300px] overflow-y-scroll p-5 rounded-xl outline-none bg-[#222]"
-      }
-    }
-  })
+        class:
+          'border-2 border-[#333] min-h-[150px] max-h-[300px] overflow-y-scroll p-5 rounded-xl outline-none bg-[#222]',
+      },
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,7 +97,7 @@ export default function CreateAnalysisPage() {
             🖋️ Tahlil sarlavhasi
           </label>
           <MenuBar editor={editor} />
-         <EditorContent editor={editor} />
+          <EditorContent editor={editor} />
         </div>
 
         <div>
