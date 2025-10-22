@@ -19,3 +19,5 @@ const comment_requests = {
         return (await httpClient.get(COMMENTS + commentId + "/replies")).data;
     }
 }
+
+export default comment_requests

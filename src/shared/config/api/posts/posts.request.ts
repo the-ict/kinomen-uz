@@ -23,4 +23,4 @@ const post_requests = {
     }
 }
 
-export {post_requests}
+export default post_requests
