@@ -1,24 +1,21 @@
 import React from 'react';
-import MovieCard from '@/widgets/movies/ui/movie-card';
+import OMDBMovieCard from '@/widgets/movies/ui/omdb-movie-card';
+import { IMovie } from '@/features/create-analyses/ui/index';
 
-const mockMovies = [
+const mockMovies: IMovie[] = [
   {
-    id: 3,
-    title: 'The Matrix',
-    year: 1999,
-    genre: 'Action',
-    country: 'USA',
-    poster: '/movieposter.jpg',
-    rating: 8.7,
+    Title: 'The Matrix',
+    Year: '1999',
+    imdbID: 'tt0133093',
+    Type: 'movie',
+    Poster: 'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg',
   },
   {
-    id: 4,
-    title: 'Tenet',
-    year: 2020,
-    genre: 'Thriller',
-    country: 'UK',
-    poster: '/movieposter.jpg',
-    rating: 7.5,
+    Title: 'Tenet',
+    Year: '2020',
+    imdbID: 'tt6723592',
+    Type: 'movie',
+    Poster: 'https://m.media-amazon.com/images/M/MV5BYzg0NGM2NjQtZjgzZi00MmQ2LWE5MzYtNGY0YTgxOWQ4NmIxXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg',
   },
 ];
 
@@ -29,7 +26,7 @@ export default function WatchlistPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {mockMovies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} type="watchlist" />
+          <OMDBMovieCard key={movie.imdbID} movie={movie} type="watchlist" />
         ))}
       </div>
     </section>

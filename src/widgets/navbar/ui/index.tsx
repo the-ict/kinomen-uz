@@ -16,7 +16,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/shared/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, User } from 'lucide-react';
 import { authedMenu, menu } from '../lib/data';
 import { PRODUCT_INFO } from '@/shared/constants/data';
 import RenderMenuItem from './RenderItem';
@@ -26,6 +26,8 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
 import { useStore } from '@/shared/store';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
+import user_requests from '@/shared/config/api/user/user.requests';
 
 const Navbar = () => {
   const [isHide, setIsHide] = useState<boolean>(false);
@@ -62,6 +64,13 @@ const Navbar = () => {
   };
 
   if (isHide) return;
+
+  const me = useQuery({
+    queryKey: ['user-info'],
+    queryFn: () => user_requests.getMe(),
+  });
+
+  console.log(me.data);
 
   return (
     <section
@@ -105,16 +114,26 @@ const Navbar = () => {
                 <Link href={auth.signup.url}>{auth.signup.title}</Link>
               </Button>
             </div>
-          ) : (
+          ) : me.data?.imageUrl ? (
             <div>
               <Image
-                src={ProfilePicture}
+                src={me.data?.imageUrl || ''}
+                onClick={() =>
+                  (window.location.href = '/single-user/' + me.data?.id)
+                }
                 alt="What up"
                 width={50}
                 height={50}
                 className="rounded-full object-cover cursor-pointer"
               />
             </div>
+          ) : (
+            <User
+              className="w-5 h-5 cursor-pointer"
+              onClick={() =>
+                (window.location.href = '/single-user/' + me.data?.id)
+              }
+            />
           )}
         </nav>
 

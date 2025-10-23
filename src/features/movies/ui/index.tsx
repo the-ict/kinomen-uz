@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import {
@@ -10,10 +9,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { ChevronDown, ChevronRight, Search, Star } from 'lucide-react';
-import MovieCard from '@/widgets/movies/ui/movie-card';
+import { ChevronDown, Search,  } from 'lucide-react';
 import httpClient from '@/shared/config/api/httpClient';
 import { ResWithPagination } from '@/shared/config/api/types';
+import OMDBMovieCard from '@/widgets/movies/ui/omdb-movie-card';
+import { movie_requests } from '@/shared/config/api/movie/movie.requests';
+import { IMovie } from '@/features/create-analyses/ui';
 
 interface Movie {
   id: number;
@@ -55,118 +56,23 @@ const fetchMovies = async ({
 };
 
 export default function MoviesPage() {
-  const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [genre, setGenre] = useState('');
-  const [year, setYear] = useState('');
-  const [country, setCountry] = useState('');
-  const [sort, setSort] = useState('latest');
+  const [search, setSearch] = useState<string>('');
+  const [year, setYear] = useState<string>('');
+  const [filteredMovie, setFilteredMovie] = useState<IMovie[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [type, setType] = useState<"movie" | "series" | "episode" | "">("")
 
-  useMemo(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 500);
-    return () => clearTimeout(timer);
-  }, [search]);
-
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    error,
-  } = useInfiniteQuery({
-    queryKey: ['movies', debouncedSearch, genre, year, country, sort],
-    queryFn: ({ pageParam }) =>
-      fetchMovies({
-        pageParam,
-        search: debouncedSearch,
-        genre,
-        year,
-        country,
-        sort,
-      }),
-    getNextPageParam: (lastPage) => lastPage.links.next,
-    initialPageParam: 1,
-  });
-
-  const movies = data?.pages.flatMap((page) => page.data) || [];
-
-  const genres = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi'];
   const years = Array.from({ length: 30 }, (_, i) => (2024 - i).toString());
-  const countries = ['USA', 'UK', 'France', 'Germany', 'Japan'];
-  const sortOptions = [
-    { value: 'latest', label: 'Eng oxirgi' },
-    { value: 'most_rated', label: 'Eng yaxshi baholangani' },
-    { value: 'most_viewed', label: "Eng ko'p ko'rilgani" },
-  ];
-  const [rating, setRating] = useState<number>(6);
 
-  const mockMovies = [
-    {
-      id: 1,
-      title: 'Movie 1',
-      year: 2023,
-      genre: 'Action',
-      country: 'USA',
-      poster: '',
-      rating: 8.5,
-    },
-    {
-      id: 2,
-      title: 'Movie 2',
-      year: 2022,
-      genre: 'Comedy',
-      country: 'UK',
-      poster: '',
-      rating: 7.8,
-    },
-    {
-      id: 3,
-      title: 'Movie 3',
-      year: 2024,
-      genre: 'Drama',
-      country: 'France',
-      poster: '',
-      rating: 9.1,
-    },
-    {
-      id: 4,
-      title: 'Movie 4',
-      year: 2021,
-      genre: 'Horror',
-      country: 'Germany',
-      poster: '',
-      rating: 6.9,
-    },
-    {
-      id: 5,
-      title: 'Movie 5',
-      year: 2023,
-      genre: 'Sci-Fi',
-      country: 'Japan',
-      poster: '',
-      rating: 8.2,
-    },
-    {
-      id: 6,
-      title: 'Movie 6',
-      year: 2022,
-      genre: 'Action',
-      country: 'USA',
-      poster: '',
-      rating: 7.5,
-    },
-    {
-      id: 7,
-      title: 'Movie 7',
-      year: 2024,
-      genre: 'Comedy',
-      country: 'UK',
-      poster: '',
-      rating: 8.0,
-    },
-  ];
+  useEffect(() => {
+    setLoading(true);
+    movie_requests.filterMovie(search, year, type).then((res) => {
+      console.log(res)
+      setFilteredMovie(res.Search);
+    });
 
+    setLoading(false);
+  }, [search, year, type]);
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="custom-container py-8">
@@ -194,34 +100,6 @@ export default function MoviesPage() {
                 <DropdownMenuTrigger asChild className="h-10">
                   <Button
                     variant="outline"
-                    className="bg-[#161616] border-gray-700 text-white cursor-pointer"
-                  >
-                    Janr: {genre || 'Hammasi'} <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-[#161616] border-gray-700">
-                  <DropdownMenuItem
-                    onClick={() => setGenre('')}
-                    className="text-white cursor-pointer hover:bg-gray-700"
-                  >
-                    Hammasi
-                  </DropdownMenuItem>
-                  {genres.map((g) => (
-                    <DropdownMenuItem
-                      key={g}
-                      onClick={() => setGenre(g)}
-                      className="text-white hover:bg-gray-700 cursor-pointer"
-                    >
-                      {g}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild className="h-10">
-                  <Button
-                    variant="outline"
                     className="bg-[#161616] cursor-pointer border-gray-700 text-white"
                   >
                     Yil: {year || 'Hammasi'} <ChevronDown size={16} />
@@ -245,74 +123,29 @@ export default function MoviesPage() {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild className="h-10">
                   <Button
                     variant="outline"
                     className="bg-[#161616] cursor-pointer border-gray-700 text-white"
                   >
-                    Davlat: {country || 'Hammasi'} <ChevronDown size={16} />
+                    Turi: {type || 'Hammasi'} <ChevronDown size={16} />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-[#161616] border-gray-700">
+                <DropdownMenuContent className="bg-[#161616] border-gray-700 max-h-60 overflow-y-auto">
                   <DropdownMenuItem
-                    onClick={() => setCountry('')}
+                    onClick={() => setType('')}
                     className="text-white cursor-pointer hover:bg-gray-700"
                   >
                     Hammasi
                   </DropdownMenuItem>
-                  {countries.map((c) => (
+                  {["movie", "series", "episode"].map((y) => (
                     <DropdownMenuItem
-                      key={c}
-                      onClick={() => setCountry(c)}
+                      key={y}
+                      onClick={() => setType(y as "movie" | "series" | "episode")}
                       className="text-white cursor-pointer hover:bg-gray-700"
                     >
-                      {c}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild className="h-10">
-                  <Button
-                    variant="outline"
-                    className="bg-[#161616] cursor-pointer border-gray-700 text-white"
-                  >
-                    Saralash: {sortOptions.find((s) => s.value === sort)?.label}{' '}
-                    <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-[#161616] border-gray-700">
-                  {sortOptions.map((option) => (
-                    <DropdownMenuItem
-                      key={option.value}
-                      onClick={() => setSort(option.value)}
-                      className="text-white cursor-pointer hover:bg-gray-700"
-                    >
-                      {option.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild className="h-10 cursor-pointer">
-                  <Button variant={'outline'}>
-                    Reyting: {rating}
-                    <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent>
-                  {[5, 6, 7, 8, 9, 10].map((rating) => (
-                    <DropdownMenuItem
-                      className="flex items-center gap-2 cursor-pointer hover:bg-gray-700"
-                      onClick={() => setRating(rating)}
-                    >
-                      <Star size={16} />
-                      <span>{rating}</span>
+                      {y}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -321,16 +154,15 @@ export default function MoviesPage() {
           </div>
         </div>
 
-        {isLoading ? (
+        {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="text-gray-400">Yuklanmoqda...</div>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-              {mockMovies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} type="search" />
-              ))}
+              {Array.isArray(filteredMovie) &&
+                filteredMovie.map((movie, index) => <OMDBMovieCard movie={movie} key={index}/>)}
             </div>
           </>
         )}

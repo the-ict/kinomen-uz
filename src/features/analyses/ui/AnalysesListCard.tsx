@@ -4,13 +4,15 @@ import AnalysisCardImage from '../../../../public/movie-analysis.webp';
 import { HeartHandshake, User, MessageCircle, Eye } from 'lucide-react';
 import type { IPost } from '@/shared/config/api/posts/posts.model';
 
-
 interface AnalysesListCardProps {
   analyses: IPost;
   isOwner?: boolean;
 }
 
-export default function AnalysesListCard({ analyses, isOwner = false }: AnalysesListCardProps) {  
+export default function AnalysesListCard({
+  analyses,
+  isOwner = false,
+}: AnalysesListCardProps) {
   return (
     <div
       onClick={(e) => {
@@ -51,6 +53,7 @@ export default function AnalysesListCard({ analyses, isOwner = false }: Analyses
           src={analyses.imageUrl || AnalysisCardImage.src}
           alt="Analysis"
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>

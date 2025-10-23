@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/shared/ui/button';
@@ -21,17 +21,17 @@ export default function Login() {
   const userStore = useStore();
 
   useEffect(() => {
-    if(userStore.token) {
-      window.location.replace('/')
+    if (userStore.token) {
+      window.location.replace('/');
     }
-  }, [])
+  }, []);
 
   const login = useMutation({
     mutationKey: ['login'],
     mutationFn: () => auth_requests.login({ password, email }),
     onSuccess: (res) => {
       userStore.setToken(res.token);
-      window.location.href = "/analyses"
+      window.location.href = '/analyses';
     },
     onError: (err) => {
       console.log(err);
@@ -40,7 +40,7 @@ export default function Login() {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    
+
     const result = LoginSchema.safeParse({ email, password });
     console.log(result);
     if (!result.success) throw new Error('Validation error!');

@@ -19,7 +19,7 @@ export interface UserBodyModels {
 }
 
 export interface UpdateBodyModel {
-    email?: string;
+  email?: string;
   username?: string;
   password?: string;
   name?: string;

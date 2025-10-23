@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useRouter } from 'next/navigation';
 import { useEditor, EditorContent } from '@tiptap/react';
@@ -33,7 +33,6 @@ function Star({ filled, onClick }: { filled: boolean; onClick: () => void }) {
     </button>
   );
 }
-
 
 export default function EditAnalysisPage() {
   const { id } = useParams();
@@ -122,11 +121,11 @@ export default function EditAnalysisPage() {
     mutationFn: () => post_requests.deletePost(Number(id)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['analyses'] });
-      toast.success('Tahlil muvaffaqiyatli o\'chirildi');
+      toast.success("Tahlil muvaffaqiyatli o'chirildi");
       router.push('/analyses');
     },
     onError: (error) => {
-      toast.error('Tahlilni o\'chirishda xatolik yuz berdi');
+      toast.error("Tahlilni o'chirishda xatolik yuz berdi");
       console.error('Delete error:', error);
     },
   });
@@ -138,7 +137,7 @@ export default function EditAnalysisPage() {
   };
 
   const handleDelete = () => {
-    if (window.confirm('Haqiqatan ham ushbu tahlilni o\'chirmoqchimisiz?')) {
+    if (window.confirm("Haqiqatan ham ushbu tahlilni o'chirmoqchimisiz?")) {
       deleteMutation.mutate();
     }
   };
@@ -205,7 +204,9 @@ export default function EditAnalysisPage() {
             onClick={handleDelete}
             disabled={deleteMutation.isPending}
           >
-            {deleteMutation.isPending ? 'O\'chirilmoqda...' : 'Tahlilni O\'chirish'}
+            {deleteMutation.isPending
+              ? "O'chirilmoqda..."
+              : "Tahlilni O'chirish"}
           </Button>
           <div className="flex gap-3">
             <Button

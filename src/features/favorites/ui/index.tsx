@@ -1,24 +1,21 @@
 import React from 'react';
-import MovieCard from '@/widgets/movies/ui/movie-card';
+import OMDBMovieCard from '@/widgets/movies/ui/omdb-movie-card';
+import { IMovie } from '@/features/create-analyses/ui/index';
 
-const mockMovies = [
+const mockMovies: IMovie[] = [
   {
-    id: 1,
-    title: 'Inception',
-    year: 2010,
-    genre: 'Sci-Fi',
-    country: 'USA',
-    poster: '/movieposter.jpg',
-    rating: 8.8,
+    Title: 'Inception',
+    Year: '2010',
+    imdbID: 'tt1375666',
+    Type: 'movie',
+    Poster: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
   },
   {
-    id: 2,
-    title: 'Interstellar',
-    year: 2014,
-    genre: 'Sci-Fi',
-    country: 'USA',
-    poster: '/movieposter.jpg',
-    rating: 8.6,
+    Title: 'Interstellar',
+    Year: '2014',
+    imdbID: 'tt0816692',
+    Type: 'movie',
+    Poster: 'https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg',
   },
 ];
 
@@ -29,7 +26,7 @@ export default function FavoritesPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {mockMovies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} type="favorites" />
+          <OMDBMovieCard key={movie.imdbID} movie={movie} type="favorites" />
         ))}
       </div>
     </section>

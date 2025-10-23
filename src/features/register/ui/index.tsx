@@ -32,11 +32,11 @@ export default function Register() {
     mutationFn: () => auth_requests.register({ username, email, password }),
     onSuccess: (res) => {
       userStore.setToken(res.token);
-      window.location.href = "/analyses"
+      window.location.href = '/analyses';
     },
     onError: (error) => {
       console.log(error);
-    }
+    },
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {

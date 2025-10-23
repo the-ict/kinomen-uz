@@ -8,6 +8,11 @@ import { useState } from 'react';
 import AnalysesListCard from '@/features/analyses/ui/AnalysesListCard';
 import CommentItem from '@/features/single-analyses/ui/CommentItem';
 import MovieCard from '@/widgets/movies/ui/movie-card';
+import { useQuery } from '@tanstack/react-query';
+import post_requests from '@/shared/config/api/posts/posts.request';
+import comment_requests from '@/shared/config/api/comment/comment.request';
+import user_requests from '@/shared/config/api/user/user.requests';
+import { User } from 'lucide-react';
 
 export default function index() {
   const [activeTab, setActiveTab] = useState<
@@ -16,24 +21,58 @@ export default function index() {
 
   const activeTabStyle = 'border-b-2 border-gray-200 cursor-pointer';
 
+  const posts = useQuery({
+    queryKey: ['my-posts'],
+    queryFn: () => post_requests.getMyPosts(),
+  });
+
+  const comments = useQuery({
+    queryKey: ['my-comments'],
+    queryFn: () => comment_requests.geyMyComments(),
+  });
+
+  const me = useQuery({
+    queryKey: ['user-info'],
+    queryFn: () => user_requests.getMe(),
+  });
+
+  console.log(posts.data);
+  console.log(comments.data);
+  console.log(me.data);
+
   return (
     <section className="min-h-screen">
-      <div className="w-full h-[30vh] relative">
-        <Image src={CoverImage.src} alt="hero" fill className="object-cover" />
-
-        <div className="absolute -bottom-[15px] w-full">
-          <div className="custom-container flex items-center gap-5">
+      <div className="w-full">
+        {me.data?.coverImage && (
+          <div className="h-[30vh] w-full relative">
             <Image
-              src={ProfilePicture.src}
-              alt="What up"
-              width={50}
-              height={50}
-              className="rounded-full object-cover cursor-pointer"
+              src={me.data.coverImage}
+              alt="hero"
+              fill
+              sizes="100vw"
+              className="object-cover"
             />
+          </div>
+        )}
+
+        <div className="w-full">
+          <div className="custom-container flex items-center gap-5">
+            {me.data?.imageUrl ? (
+              <Image
+                src={me.data.imageUrl}
+                alt="Profile"
+                width={100}
+                height={100}
+                sizes="100px"
+                className="rounded-full h-[100px] w-[100px] object-cover"
+              />
+            ) : (
+              <User className="w-5 h-5" />
+            )}
 
             <div className="flex items-center gap-2">
-              <p>@the-ict</p>
-              <p className="text-sm text-gray-200">10 kun oldin</p>
+              <p>{me.data?.username}</p>
+              <p className="text-sm text-gray-200">{me.data?.email}</p>
             </div>
           </div>
         </div>
@@ -73,44 +112,28 @@ export default function index() {
             </TabsTrigger>
 
             <TabsContent value="analyses" className="grid grid-cols-4 gap-5">
-              {[1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10].map((item) => (
-                <AnalysesListCard key={item} />
+              {posts.data?.map((item) => (
+                <AnalysesListCard key={item.id} analyses={item} isOwner={me.data?.id == item.authorId}/>
               ))}
             </TabsContent>
             <TabsContent value="replies">
-              {[1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10].map((item) => (
-                <CommentItem key={item} />
+              {Array.isArray(comments.data) && comments.data.map((item) => (
+                <CommentItem key={item.id} comment={item} meId={me.data?.id || 0}/>
               ))}
             </TabsContent>
             <TabsContent value="watchlist" className="grid grid-cols-6 gap-10">
-              {[1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10].map((item) => (
+              {Array.isArray(posts.data) && posts.data.map((item) => (
                 <MovieCard
-                  key={item}
-                  movie={{
-                    id: 3,
-                    title: 'Movie 3',
-                    year: 2024,
-                    genre: 'Drama',
-                    country: 'France',
-                    poster: '',
-                    rating: 9.1,
-                  }}
+                  key={item.id}
+                  movie={item}
                 />
               ))}
             </TabsContent>
-            <TabsContent value="favorites" className='grid grid-cols-6 gap-10'>
-              {[1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10].map((item) => (
+            <TabsContent value="favorites" className="grid grid-cols-6 gap-10">
+              {Array.isArray(posts.data) && posts.data.map((item) => (
                 <MovieCard
-                  key={item}
-                  movie={{
-                    id: 3,
-                    title: 'Movie 3',
-                    year: 2024,
-                    genre: 'Drama',
-                    country: 'France',
-                    poster: '',
-                    rating: 9.1,
-                  }}
+                  key={item.id}
+                  movie={item}
                 />
               ))}
             </TabsContent>

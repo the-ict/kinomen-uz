@@ -152,7 +152,9 @@ export default function CreateAnalysisPage() {
                 alt={chosenMovie.Title}
                 src={chosenMovie.Poster}
                 className="w-full h-full object-cover rounded-2xl"
-                fill
+                width={250}
+                height={150}
+                sizes="(max-width: 768px) 100vw, 250px"
               />
             </div>
             <div className="flex flex-col gap-2">

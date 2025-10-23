@@ -26,7 +26,8 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
 
   const updateComment = useMutation({
     mutationKey: ['update-comment', comment.id],
-    mutationFn: () => comment_requests.updateComment(comment.id, { content: editedContent }),
+    mutationFn: () =>
+      comment_requests.updateComment(comment.id, { content: editedContent }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
       setIsEditing(false);
@@ -52,16 +53,17 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
       deleteComment.mutate();
     }
   };
-  
+
   return (
     <div className="mt-5 w-full flex items-start gap-5">
       {comment.author.imageUrl ? (
         <Image
           src={comment.author.imageUrl}
-          alt="What up"
+          alt="Profile"
           width={50}
           height={50}
-          className="rounded-full object-cover cursor-pointer"
+          sizes="50px"
+          className="rounded-full h-[50px] w-[50px] object-cover cursor-pointer"
         />
       ) : (
         <User className="w-5 h-5" />
@@ -73,7 +75,7 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
             {new Date(comment.createdAt).toLocaleString()}
           </p>
         </div>
-        
+
         {isEditing ? (
           <div className="flex flex-col gap-2">
             <textarea
@@ -82,28 +84,30 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
               className="min-h-[100px] p-5 rounded border border-[#333]"
             />
             <div className="flex gap-2">
-              <Button 
+              <Button
                 onClick={handleUpdate}
                 disabled={updateComment.isPending}
                 size="sm"
               >
                 {updateComment.isPending ? 'Saving...' : 'Save'}
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => {
                   setIsEditing(false);
                   setEditedContent(comment.content);
                 }}
                 size="sm"
-                className='cursor-pointer'
+                className="cursor-pointer"
               >
                 Cancel
               </Button>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-gray-200 whitespace-pre-line">{comment.content}</p>
+          <p className="text-sm text-gray-200 whitespace-pre-line">
+            {comment.content}
+          </p>
         )}
 
         <div className="flex items-center gap-5">
@@ -137,13 +141,13 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="flex items-center justify-between cursor-pointer"
               onClick={() => setIsEditing(true)}
             >
               O'zgartirish <Edit className="w-4 h-4 ml-2" />
             </DropdownMenuItem>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="flex items-center justify-between cursor-pointer text-red-500 focus:text-red-500"
               onClick={handleDelete}
             >

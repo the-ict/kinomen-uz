@@ -1,5 +1,9 @@
+"use client"
+
 import React from 'react';
 import MovieCard from './movie-card';
+import { useQuery } from '@tanstack/react-query';
+import { movie_requests } from '@/shared/config/api/movie/movie.requests';
 
 export default function index() {
   const mockMovies = [
@@ -68,9 +72,14 @@ export default function index() {
     },
   ];
 
+  const movies = useQuery({
+    queryKey: ["popular-movies"],
+    queryFn: () => movie_requests.getPopulerMovies(),
+  })
+
   return (
-    <section className="grid grid-cols-7 gap-10 w-full mt-[100px]">
-      {mockMovies.map((movie) => (
+    <section className="grid grid-cols-7 gap-10 w-full pt-[100px]" id='movies'>
+      {Array.isArray(movies.data) && movies.data.slice(0,5).map((movie) => (
         <MovieCard key={movie.id} movie={movie} type="home" />
       ))}
     </section>

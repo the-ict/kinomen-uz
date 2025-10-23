@@ -1,5 +1,5 @@
 import httpClient from '../httpClient';
-import { POSTS } from '../URLs';
+import { MY_POSTS, POSTS } from '../URLs';
 import { IPost, PostBodyModel } from './posts.model';
 
 const post_requests = {
@@ -20,6 +20,9 @@ const post_requests = {
   },
   likePost: async (id: number) => {
     return (await httpClient.post(POSTS + id + '/like')).data;
+  },
+  getMyPosts: async (): Promise<IPost[]> => {
+    return (await httpClient.get(MY_POSTS)).data;
   },
 };
 
