@@ -6,7 +6,7 @@ import { Heart, User } from 'lucide-react';
 import Image from 'next/image';
 import CommentItem from './CommentItem';
 import { useParams } from 'next/navigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import post_requests from '@/shared/config/api/posts/posts.request';
 import user_requests from '@/shared/config/api/user/user.requests';
 import comment_requests from '@/shared/config/api/comment/comment.request';
@@ -15,6 +15,7 @@ export default function index() {
   const [commentText, setCommentText] = React.useState<string>('');
 
   const params = useParams();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     console.log(params);
@@ -55,6 +56,7 @@ export default function index() {
       }),
     onSuccess: () => {
       setCommentText('');
+      queryClient.invalidateQueries({ queryKey: ['comments', params.id] });
     },
   });
 

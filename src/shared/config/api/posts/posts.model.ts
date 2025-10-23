@@ -1,8 +1,8 @@
 export interface PostBodyModel {
     title: string;
     content?: string;
-    movie: string;
-    rating: number;
+    movie?: string;
+    rating?: number;
     authorId?: number;
     likes?: string[];
     comments?: string[];

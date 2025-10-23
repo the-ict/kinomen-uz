@@ -64,24 +64,42 @@ export default function CreateAnalysisPage() {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        paragraph: {
+          HTMLAttributes: {
+            class: 'mb-4',
+          },
+        },
+      }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
       Highlight,
     ],
-    content: 'Xoxlaganingizcha sharx yozing !',
-    immediatelyRender: false,
-    onUpdate: (content) => {
-      setContent(content.editor.getHTML());
-      console.log('Content:   ', content.editor.getHTML());
+    content: 'Xoxlaganingizcha sharx yozing!',
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML());
     },
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
-          'border-2 border-[#333] min-h-[150px] max-h-[300px] overflow-y-scroll p-5 rounded-xl outline-none bg-[#222]',
+          'border-2 border-[#333] min-h-[150px] max-h-[300px] overflow-y-auto p-5 rounded-xl outline-none bg-[#222] whitespace-pre-wrap',
       },
     },
+    parseOptions: {
+      preserveWhitespace: 'full',
+    },
+    enablePasteRules: [
+      'textStyle',
+      'bold',
+      'italic',
+      'underline',
+      'strike',
+      'code',
+      'highlight',
+      'textAlign',
+    ],
   });
 
   const handleSubmit = (e: React.FormEvent) => {

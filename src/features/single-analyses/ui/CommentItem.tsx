@@ -1,9 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import React from 'react';
-import ProfilePicture from '../../../../public/pp.jpg';
-import { ChevronDown, Edit, Trash, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronDown, Edit, Trash, User, X, Check } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { IComment } from '@/shared/config/api/comment/comment.model';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import comment_requests from '@/shared/config/api/comment/comment.request';
+import { Button } from '@/shared/ui/button';
 
 interface CommentItemProps {
   comment: IComment;
@@ -18,6 +20,39 @@ interface CommentItemProps {
 }
 
 export default function CommentItem({ comment, meId }: CommentItemProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(comment.content);
+  const queryClient = useQueryClient();
+
+  const updateComment = useMutation({
+    mutationKey: ['update-comment', comment.id],
+    mutationFn: () => comment_requests.updateComment(comment.id, { content: editedContent }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+      setIsEditing(false);
+    },
+  });
+
+  const deleteComment = useMutation({
+    mutationKey: ['delete-comment', comment.id],
+    mutationFn: () => comment_requests.deleteComment(comment.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+    },
+  });
+
+  const handleUpdate = () => {
+    if (editedContent.trim() !== '') {
+      updateComment.mutate();
+    }
+  };
+
+  const handleDelete = () => {
+    if (confirm('Are you sure you want to delete this comment?')) {
+      deleteComment.mutate();
+    }
+  };
+  
   return (
     <div className="mt-5 w-full flex items-start gap-5">
       {comment.author.imageUrl ? (
@@ -35,10 +70,41 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
         <div className="flex items-center gap-2">
           <p>@{comment.author.username}</p>
           <p className="text-sm text-gray-200">
-            {comment.createdAt.toString()}
+            {new Date(comment.createdAt).toLocaleString()}
           </p>
         </div>
-        <p className="text-sm text-gray-200">{comment.content}</p>
+        
+        {isEditing ? (
+          <div className="flex flex-col gap-2">
+            <textarea
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              className="min-h-[100px] p-5 rounded border border-[#333]"
+            />
+            <div className="flex gap-2">
+              <Button 
+                onClick={handleUpdate}
+                disabled={updateComment.isPending}
+                size="sm"
+              >
+                {updateComment.isPending ? 'Saving...' : 'Save'}
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setIsEditing(false);
+                  setEditedContent(comment.content);
+                }}
+                size="sm"
+                className='cursor-pointer'
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-200 whitespace-pre-line">{comment.content}</p>
+        )}
 
         <div className="flex items-center gap-5">
           <button className="flex items-center gap-2 cursor-pointer">
@@ -71,11 +137,17 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
-            <DropdownMenuItem className="flex items-center justify-between cursor-pointer">
-              O'zgartirish <Edit className="w-5 h-5" />
+            <DropdownMenuItem 
+              className="flex items-center justify-between cursor-pointer"
+              onClick={() => setIsEditing(true)}
+            >
+              O'zgartirish <Edit className="w-4 h-4 ml-2" />
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center justify-between cursor-pointer">
-              O'chirish <Trash className="w-5 h-5" />
+            <DropdownMenuItem 
+              className="flex items-center justify-between cursor-pointer text-red-500 focus:text-red-500"
+              onClick={handleDelete}
+            >
+              O'chirish <Trash className="w-4 h-4 ml-2" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
