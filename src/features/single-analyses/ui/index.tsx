@@ -36,9 +36,14 @@ export default function index() {
   });
 
   const comments = useQuery({
-    queryKey: ['comments'],
+    queryKey: ['comments', params.id],
     queryFn: () => comment_requests.getPostComments(Number(params.id)),
+    select: (data) => data.reverse(),
   });
+
+  useEffect(() => {
+    console.log(comments.data);
+  }, [comments.data]);
 
   const createComment = useMutation({
     mutationKey: ['create-comment'],
@@ -48,16 +53,17 @@ export default function index() {
         content: commentText,
         authorId: author.data?.id || 1,
       }),
+    onSuccess: () => {
+      setCommentText('');
+    },
   });
 
   const handleCreateComment = () => {
+    console.log(commentText, 'comment text');
     if (commentText.trim() === '') return;
 
     createComment.mutate();
-    setCommentText('');
   };
-
-  console.log(console.log(me.data));
 
   return (
     <section className="custom-container mt-[30px]">
@@ -143,9 +149,10 @@ export default function index() {
 
       <div className="flex flex-col items-start gap-5 my-5">
         {Array.isArray(comments.data) &&
-          comments.data.map((comment) => (
+          comments.data.length > 0 &&
+          comments.data.map((comment, index) => (
             <CommentItem
-              key={comment.id}
+              key={index}
               comment={comment}
               meId={me.data?.id || 0}
             />
