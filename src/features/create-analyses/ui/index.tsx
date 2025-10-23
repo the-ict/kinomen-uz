@@ -1,19 +1,37 @@
 'use client';
 
+import { movie_requests } from '@/shared/config/api/movie/movie.requests';
 import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import { useEditor, EditorContent } from '@tiptap/react';
 import { Button } from '@/shared/ui/button';
 import StarterKit from '@tiptap/starter-kit';
 import { Input } from '@/shared/ui/input';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MenuBar from './menu-bar';
 
+export interface IMovie {
+  Title: string;
+  Year: string;
+  imdbID: string;
+  Type: string;
+  Poster: string;
+}
+
 export default function CreateAnalysisPage() {
-  const [movieName, setMovieName] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [rating, setRating] = useState(0);
+  const [movieName, setMovieName] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [rating, setRating] = useState<number>(0);
+  const [guessedMovies, setGuessedMovies] = useState<IMovie[]>([]);
+  const [chosenMovieName, setChosenMovieName] = useState<string>('');
+
+  useEffect(() => {
+    movie_requests
+      .searchForMovie(movieName)
+      .then((res) => setGuessedMovies(res.Search || []))
+      .catch((err) => console.log(err));
+  }, [movieName]);
 
   const editor = useEditor({
     extensions: [
@@ -24,7 +42,7 @@ export default function CreateAnalysisPage() {
       Highlight,
     ],
     content: 'Xoxlaganingizcha sharx yozing !',
-    immediatelyRender: true,
+    immediatelyRender: false,
     onUpdate: (content) => {
       setContent(content.editor.getHTML());
       console.log('Content:   ', content.editor.getHTML());
@@ -66,17 +84,47 @@ export default function CreateAnalysisPage() {
         onSubmit={handleSubmit}
         className="bg-[#161616] border border-white/10 rounded-2xl p-8 flex flex-col gap-6"
       >
-        <div>
+        <div className="relative">
           <label className="block text-sm font-semibold mb-2">
             🎬 Kino nomi
           </label>
           <Input
             type="text"
-            value={movieName}
+            value={chosenMovieName.length > 2 ? chosenMovieName : movieName}
             onChange={(e) => setMovieName(e.target.value)}
             placeholder="Masalan: 'Inception (2010)'"
             className="bg-black/40 border-white/10 text-gray-100"
           />
+
+          {Array.isArray(guessedMovies) && guessedMovies.length > 0 && (
+            <div className="absolute left-0 w-full top-[calc(100%+10px)] rounded bg-[#222] z-50">
+              <ul className="p-4">
+                {guessedMovies.map((movie) => (
+                  <li
+                    key={movie.imdbID}
+                    className="flex items-center gap-4 border-b border-white/10 p-4 cursor-pointer"
+                    onClick={() => {
+                      setMovieName('');
+                      setGuessedMovies([]);
+                      setChosenMovieName(movie.Title);
+                    }}
+                  >
+                    <img
+                      src={movie.Poster}
+                      alt={movie.Title}
+                      className="w-20 h-20 object-cover rounded-2xl"
+                    />
+                    <div className="flex flex-col">
+                      <h3 className="text-gray-100">
+                        {movie.Title} ({movie.Year})
+                      </h3>
+                      <p className="text-gray-400 text-sm">{movie.Type}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div>
