@@ -1,5 +1,11 @@
 import httpClient from '../httpClient';
-import { CHECK_USERNAME, FOLLOW_USER, GET_PROFILE, WATCHLIST } from '../URLs';
+import {
+  CHECK_USERNAME,
+  FOLLOW_USER,
+  GET_PROFILE,
+  ME,
+  WATCHLIST,
+} from '../URLs';
 import type { UpdateBodyModel, UserBodyModels } from './user.models';
 
 const user_requests = {
@@ -23,6 +29,9 @@ const user_requests = {
   },
   watchlist: async (postId: number) => {
     return (await httpClient.post(WATCHLIST + postId)).data;
+  },
+  getMe: async (): Promise<UserBodyModels> => {
+    return (await httpClient.get(ME)).data;
   },
 };
 

@@ -12,5 +12,6 @@ const FOLLOW_USER = "/users/follow/"
 const WATCHLIST = "/users/watchlist/"
 const POSTS = "/posts/"
 const COMMENTS = "/comments/"
+const ME = "/users/profile/get-by-token/me"
 
-export { BASE_URL, LOGIN, REGISTER, CHECK_USERNAME, GET_PROFILE, FOLLOW_USER, WATCHLIST, POSTS, COMMENTS, OBDM_BASE_URL, OBDM_API_KEY } ;
+export { BASE_URL, LOGIN, REGISTER, CHECK_USERNAME, GET_PROFILE, FOLLOW_USER, WATCHLIST, POSTS, COMMENTS, OBDM_BASE_URL, OBDM_API_KEY, ME } ;

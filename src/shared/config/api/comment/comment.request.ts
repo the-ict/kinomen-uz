@@ -7,7 +7,7 @@ const comment_requests = {
         return (await httpClient.post(COMMENTS, body)).data;
     },
     getPostComments: async(postId: number) =>{
-        return (await httpClient.get(COMMENTS + "/post/" + postId)).data;
+        return (await httpClient.get(COMMENTS + "post/" + postId)).data;
     } ,
     updateComment: async(id: number, body: CommentUpdateModel) => {
         return (await httpClient.put(COMMENTS + id, body)).data;

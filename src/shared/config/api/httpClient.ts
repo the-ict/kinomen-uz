@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getLocale } from 'next-intl/server';
 import { LanguageRoutes } from '../i18n/types';
 import { BASE_URL } from './URLs';
+import { useStore } from '@/shared/store';
 
 const httpClient = axios.create({
   baseURL: BASE_URL,
@@ -11,7 +12,7 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use(
   async (config) => {
-    console.log(`API REQUEST to ${config.url}`, config);
+    const token = useStore.getState().token;
 
     let language = LanguageRoutes.UZ;
     try {
@@ -22,6 +23,7 @@ httpClient.interceptors.request.use(
     }
 
     config.headers['Accept-Language'] = language;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
 
     return config;
   },

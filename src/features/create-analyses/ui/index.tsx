@@ -9,6 +9,20 @@ import StarterKit from '@tiptap/starter-kit';
 import { Input } from '@/shared/ui/input';
 import React, { useEffect, useState } from 'react';
 import MenuBar from './menu-bar';
+import { useMutation } from '@tanstack/react-query';
+import post_requests from '@/shared/config/api/posts/posts.request';
+import Image from 'next/image';
+import { z } from 'zod';
+
+const createPostSchema = z.object({
+  title: z.string().min(3, 'Title must be at least 3 characters long'),
+  content: z.string().min(3, 'Content must be at least 3 characters long'),
+  rating: z
+    .number()
+    .min(1, 'Rating must be at least 1')
+    .max(5, 'Rating must be at most 5'),
+  movie: z.string().min(3, 'Movie must be at least 3 characters long'),
+});
 
 export interface IMovie {
   Title: string;
@@ -24,13 +38,28 @@ export default function CreateAnalysisPage() {
   const [content, setContent] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
   const [guessedMovies, setGuessedMovies] = useState<IMovie[]>([]);
-  const [chosenMovieName, setChosenMovieName] = useState<string>('');
+  const [chosenMovie, setChosenMovie] = useState<IMovie | null>(null);
+  const [error, setError] = useState<string>('');
+
+  const post = useMutation({
+    mutationKey: ['create-post'],
+    mutationFn: () =>
+      post_requests
+        .createPost({
+          title,
+          content,
+          rating,
+          movie: chosenMovie?.Title || '',
+          imageUrl: chosenMovie?.Poster || '',
+        })
+        .then((res) => console.log(res)),
+  });
 
   useEffect(() => {
     movie_requests
       .searchForMovie(movieName)
       .then((res) => setGuessedMovies(res.Search || []))
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err.message));
   }, [movieName]);
 
   const editor = useEditor({
@@ -57,8 +86,22 @@ export default function CreateAnalysisPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Tahlil yuborildi:', { movieName, title, content, rating });
-    alert(`✅ Tahlilingiz saqlandi! Rating: ${rating} ⭐`);
+
+    console.log('malumotlar: ', { movieName, title, content, rating });
+
+    const result = createPostSchema.safeParse({
+      title,
+      content,
+      rating,
+      movie: chosenMovie?.Title || '',
+    });
+
+    if (!result.success) {
+      console.log(result.error);
+      return;
+    }
+
+    post.mutate();
   };
 
   function Star({ filled }: { filled: boolean }) {
@@ -84,13 +127,31 @@ export default function CreateAnalysisPage() {
         onSubmit={handleSubmit}
         className="bg-[#161616] border border-white/10 rounded-2xl p-8 flex flex-col gap-6"
       >
+        {chosenMovie && (
+          <div className="flex items-center gap-5 my-5">
+            <div className="relative h-[150px] w-[250px]">
+              <Image
+                alt={chosenMovie.Title}
+                src={chosenMovie.Poster}
+                className="w-full h-full object-cover rounded-2xl"
+                fill
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <h2 className="text-2xl font-bold">{chosenMovie.Title}</h2>
+              <p className="text-gray-300">IMDB ID: {chosenMovie.imdbID}</p>
+              <p className="text-gray-300">Yili: {chosenMovie.Year}</p>
+            </div>
+          </div>
+        )}
+
         <div className="relative">
           <label className="block text-sm font-semibold mb-2">
             🎬 Kino nomi
           </label>
           <Input
             type="text"
-            value={chosenMovieName.length > 2 ? chosenMovieName : movieName}
+            value={chosenMovie?.Title || movieName}
             onChange={(e) => setMovieName(e.target.value)}
             placeholder="Masalan: 'Inception (2010)'"
             className="bg-black/40 border-white/10 text-gray-100"
@@ -106,7 +167,7 @@ export default function CreateAnalysisPage() {
                     onClick={() => {
                       setMovieName('');
                       setGuessedMovies([]);
-                      setChosenMovieName(movie.Title);
+                      setChosenMovie(movie);
                     }}
                   >
                     <img

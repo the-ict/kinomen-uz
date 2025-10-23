@@ -7,10 +7,17 @@ export interface UserStore {
 }
 
 export const useStore = create(
-  persist<UserStore>((set) => ({
-    token: "",
-    setToken: (token: string) => set(() => ({ token })),
-  }), {
-    name: "user",
-  })
-)
+  persist<UserStore>(
+    (set) => ({
+      token: '',
+      setToken: (token: string) =>
+        set(() => {
+          localStorage.setItem('token', token);
+          return { token };
+        }),
+    }),
+    {
+      name: 'user',
+    },
+  ),
+);

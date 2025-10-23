@@ -2,6 +2,7 @@ import { CommentBodyModel } from '../comment/comment.model';
 import { PostBodyModel } from '../posts/posts.model';
 
 export interface UserBodyModels {
+  id?: number;
   email: string;
   username: string;
   password: string;
