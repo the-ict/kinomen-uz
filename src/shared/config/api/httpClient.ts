@@ -1,9 +1,6 @@
-import getLocaleCS from '@/shared/lib/getLocaleCS';
 import axios from 'axios';
-import { getLocale } from 'next-intl/server';
-import { LanguageRoutes } from '../i18n/types';
 import { BASE_URL } from './URLs';
-import { useStore } from '@/shared/store';
+import { store } from '@/shared/store';
 
 const httpClient = axios.create({
   baseURL: BASE_URL,
@@ -11,29 +8,27 @@ const httpClient = axios.create({
 });
 
 httpClient.interceptors.request.use(
-  async (config) => {
-    const token = useStore.getState().token;
+  (config) => {
+    const token = store.getState().token;
 
-    let language = LanguageRoutes.UZ;
-    try {
-      language = (await getLocale()) as LanguageRoutes;
-    } catch (e) {
-      console.log('error', e);
-      language = getLocaleCS() || LanguageRoutes.UZ;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-
-    config.headers['Accept-Language'] = language;
-    if (token) config.headers.Authorization = `Bearer ${token}`;
 
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => {
+    return Promise.reject(error);
+  },
 );
 
 httpClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API error:', error);
+    if (error.response.status === 401) {
+      store.getState().setToken('');
+      // window.location.href = '/login'; 
+    }
     return Promise.reject(error);
   },
 );

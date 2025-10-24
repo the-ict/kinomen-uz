@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import auth_requests from '@/shared/config/api/auth/auth.requests';
 import { z } from 'zod';
 import { useStore } from '@/shared/store';
+import { Loading } from '@/shared/ui/loading';
 
 const RegisterSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters long'),
@@ -21,17 +22,19 @@ export default function Register() {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
-  const userStore = useStore();
+  const { token, setToken } = useStore();
 
   useEffect(() => {
-    if (!userStore.token) window.location.replace('/');
-  }, []);
+    if (token) {
+      window.location.href = '/';
+    }
+  }, [token]);
 
   const register = useMutation({
     mutationKey: ['register'],
     mutationFn: () => auth_requests.register({ username, email, password }),
     onSuccess: (res) => {
-      userStore.setToken(res.token);
+      setToken(res.token);
       window.location.href = '/analyses';
     },
     onError: (error) => {
@@ -82,8 +85,18 @@ export default function Register() {
           type="password"
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Button onClick={handleSubmit} type="submit">
-          Ro'hatdan o'tish
+        <Button 
+          onClick={handleSubmit} 
+          type="submit"
+          disabled={register.isPending}
+          className="min-w-[150px]"
+        >
+          {register.isPending ? (
+            <div className="flex items-center gap-2">
+              <Loading size="sm" variant="secondary" />
+              <span>Yuklanmoqda...</span>
+            </div>
+          ) : "Ro'hatdan o'tish"}
         </Button>
 
         <div className="flex items-center justify-center gap-2 text-center text-sm">

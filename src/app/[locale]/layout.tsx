@@ -24,6 +24,13 @@ type Props = {
   params: Promise<{ locale: Locale }>;
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maxiumScale: 1,
+  viewportFit: 'cover',
+};
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }

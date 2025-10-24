@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import auth_requests from '@/shared/config/api/auth/auth.requests';
 import { useStore } from '@/shared/store';
+import { Loading } from '@/shared/ui/loading';
 
 const LoginSchema = z.object({
   email: z.string().email().min(3, 'Email must be at least 3 character'),
@@ -24,7 +25,7 @@ export default function Login() {
     if (userStore.token) {
       window.location.replace('/');
     }
-  }, []);
+  }, [userStore.token]);
 
   const login = useMutation({
     mutationKey: ['login'],
@@ -66,7 +67,9 @@ export default function Login() {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button onClick={handleSubmit}>Kirish</Button>
+        <Button onClick={handleSubmit} disabled={login.isPending} className="min-w-[100px]">
+          {login.isPending ? <Loading size="sm" variant="secondary" /> : 'Kirish'}
+        </Button>
 
         <div className="flex items-center justify-center gap-2 text-center text-sm">
           <span>Ro'yhatdan o'tmaganmisiz?</span>

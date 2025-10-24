@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import { Accordion } from '@/shared/ui/accordion';
 import { Button } from '@/shared/ui/button';
-import ProfilePicture from '../../../../public/pp.jpg';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -28,6 +27,7 @@ import { useStore } from '@/shared/store';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import user_requests from '@/shared/config/api/user/user.requests';
+import { UPLOAD_BASE_URL } from '@/shared/config/api/URLs';
 
 const Navbar = () => {
   const [isHide, setIsHide] = useState<boolean>(false);
@@ -63,14 +63,12 @@ const Navbar = () => {
     signup: { title: "Ro'yhatdan o'tish", url: '/register' },
   };
 
-  if (isHide) return;
-
   const me = useQuery({
     queryKey: ['user-info'],
     queryFn: () => user_requests.getMe(),
   });
 
-  console.log(me.data);
+  if (isHide) return null;
 
   return (
     <section
@@ -115,15 +113,15 @@ const Navbar = () => {
               </Button>
             </div>
           ) : me.data?.imageUrl ? (
-            <div>
+            <div className='relative w-10 h-10'>
               <Image
-                src={me.data?.imageUrl || ''}
+                src={UPLOAD_BASE_URL + me.data?.imageUrl || ''}
                 onClick={() =>
                   (window.location.href = '/single-user/' + me.data?.id)
                 }
+                fill
+                sizes='50x50'
                 alt="What up"
-                width={50}
-                height={50}
                 className="rounded-full object-cover cursor-pointer"
               />
             </div>

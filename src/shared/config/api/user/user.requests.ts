@@ -6,7 +6,7 @@ import {
   ME,
   WATCHLIST,
 } from '../URLs';
-import type { UpdateBodyModel, UserBodyModels } from './user.models';
+import type { UserBodyModels } from './user.models';
 
 const user_requests = {
   checkUsername: async (username: string) => {
@@ -17,7 +17,7 @@ const user_requests = {
   },
   updateProfile: async (
     id: number,
-    body: UpdateBodyModel,
+    body: any,
   ): Promise<UserBodyModels> => {
     return (await httpClient.put(GET_PROFILE + id, body)).data;
   },

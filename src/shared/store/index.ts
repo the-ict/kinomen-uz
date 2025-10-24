@@ -1,23 +1,26 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export interface UserStore {
   token: string;
   setToken: (token: string) => void;
 }
 
-export const useStore = create(
+const store = create(
   persist<UserStore>(
     (set) => ({
       token: '',
       setToken: (token: string) =>
         set(() => {
-          localStorage.setItem('token', token);
           return { token };
         }),
     }),
     {
-      name: 'user',
+      name: 'user-storage',
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 );
+
+export const useStore = store;
+export { store };

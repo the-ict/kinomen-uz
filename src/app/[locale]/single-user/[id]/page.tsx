@@ -2,8 +2,6 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs';
 import Image from 'next/image';
-import CoverImage from '../../../../../public/movie-analysis.webp';
-import ProfilePicture from '../../../../../public/pp.jpg';
 import { useState } from 'react';
 import AnalysesListCard from '@/features/analyses/ui/AnalysesListCard';
 import CommentItem from '@/features/single-analyses/ui/CommentItem';
@@ -12,9 +10,15 @@ import { useQuery } from '@tanstack/react-query';
 import post_requests from '@/shared/config/api/posts/posts.request';
 import comment_requests from '@/shared/config/api/comment/comment.request';
 import user_requests from '@/shared/config/api/user/user.requests';
-import { User } from 'lucide-react';
+import { Edit, User } from 'lucide-react';
+import { EditProfileDialog } from '@/features/user-profile/ui';
+import { Button } from '@/shared/ui/button';
+import { UPLOAD_BASE_URL } from '@/shared/config/api/URLs';
+import { useParams } from 'next/navigation';
 
-export default function index() {
+function UserProfileContent() {
+  const params = useParams();
+
   const [activeTab, setActiveTab] = useState<
     'analyses' | 'favorites' | 'watchlist' | 'replies'
   >('analyses');
@@ -36,9 +40,10 @@ export default function index() {
     queryFn: () => user_requests.getMe(),
   });
 
-  console.log(posts.data);
-  console.log(comments.data);
-  console.log(me.data);
+  const userId = Number(params.id);
+  const isCurrentUser = me.data?.id === userId;
+
+  const imageUrl = me.data?.imageUrl ? UPLOAD_BASE_URL + me.data.imageUrl : null;
 
   return (
     <section className="min-h-screen">
@@ -46,7 +51,7 @@ export default function index() {
         {me.data?.coverImage && (
           <div className="h-[30vh] w-full relative">
             <Image
-              src={me.data.coverImage}
+              src={UPLOAD_BASE_URL + me.data.coverImage}
               alt="hero"
               fill
               sizes="100vw"
@@ -59,7 +64,7 @@ export default function index() {
           <div className="custom-container flex items-center gap-5">
             {me.data?.imageUrl ? (
               <Image
-                src={me.data.imageUrl}
+                src={UPLOAD_BASE_URL + me.data.imageUrl}
                 alt="Profile"
                 width={100}
                 height={100}
@@ -70,9 +75,25 @@ export default function index() {
               <User className="w-5 h-5" />
             )}
 
-            <div className="flex items-center gap-2">
-              <p>{me.data?.username}</p>
-              <p className="text-sm text-gray-200">{me.data?.email}</p>
+            <div className="flex items-center gap-4 w-full">
+              <div>
+                <p className="text-lg font-medium">{me.data?.username}</p>
+                <p className="text-sm text-gray-400">{me.data?.email}</p>
+                {me.data?.about && (
+                  <p className="mt-2 text-sm text-gray-300">{me.data.about}</p>
+                )}
+              </div>
+
+              {isCurrentUser && me.data && (
+                <div className="ml-auto">
+                  <EditProfileDialog user={me.data}>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Edit className="h-4 w-4" />
+                      <span>Malumotlarni o'zgartirish</span>
+                    </Button>
+                  </EditProfileDialog>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -113,29 +134,34 @@ export default function index() {
 
             <TabsContent value="analyses" className="grid grid-cols-4 gap-5">
               {posts.data?.map((item) => (
-                <AnalysesListCard key={item.id} analyses={item} isOwner={me.data?.id == item.authorId}/>
+                <AnalysesListCard
+                  key={item.id}
+                  analyses={item}
+                  isOwner={me.data?.id == item.authorId}
+                />
               ))}
             </TabsContent>
             <TabsContent value="replies">
-              {Array.isArray(comments.data) && comments.data.map((item) => (
-                <CommentItem key={item.id} comment={item} meId={me.data?.id || 0}/>
-              ))}
+              {Array.isArray(comments.data) &&
+                comments.data.map((item) => (
+                  <CommentItem
+                    key={item.id}
+                    comment={item}
+                    meId={me.data?.id || 0}
+                  />
+                ))}
             </TabsContent>
             <TabsContent value="watchlist" className="grid grid-cols-6 gap-10">
-              {Array.isArray(posts.data) && posts.data.map((item) => (
-                <MovieCard
-                  key={item.id}
-                  movie={item}
-                />
-              ))}
+              {Array.isArray(posts.data) &&
+                posts.data.map((item) => (
+                  <MovieCard key={item.id} movie={item} />
+                ))}
             </TabsContent>
             <TabsContent value="favorites" className="grid grid-cols-6 gap-10">
-              {Array.isArray(posts.data) && posts.data.map((item) => (
-                <MovieCard
-                  key={item.id}
-                  movie={item}
-                />
-              ))}
+              {Array.isArray(posts.data) &&
+                posts.data.map((item) => (
+                  <MovieCard key={item.id} movie={item} />
+                ))}
             </TabsContent>
           </TabsList>
         </Tabs>
@@ -143,3 +169,5 @@ export default function index() {
     </section>
   );
 }
+
+export default UserProfileContent;

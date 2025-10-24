@@ -3,6 +3,7 @@ const BASE_URL =
 
 const OBDM_BASE_URL = process.env.NEXT_PUBLIC_OMDB_BASE_URL || '';
 const OBDM_API_KEY = process.env.NEXT_PUBLIC_API_OMDB_KEY || '';
+const UPLOAD_BASE_URL = process.env.NEXT_PUBLIC_UPLOAD_URL || '';
 
 const LOGIN = '/auth/login';
 const REGISTER = '/auth/register';
@@ -13,6 +14,7 @@ const WATCHLIST = '/users/watchlist/';
 const POSTS = '/posts/';
 const COMMENTS = '/comments/';
 const ME = '/users/profile/get-by-token/me';
+const UPDATE_ME = '/users/profile/update-me';
 const DISCUSSED_MOVIES = '/posts/discussed/most';
 const MY_POSTS = '/posts/get-by-token/me';
 const MY_COMMENTS = "/comments/get-by-token/me"
@@ -30,7 +32,9 @@ export {
   OBDM_BASE_URL,
   OBDM_API_KEY,
   ME,
-DISCUSSED_MOVIES,
-MY_POSTS,
-MY_COMMENTS,
+  DISCUSSED_MOVIES,
+  MY_POSTS,
+  MY_COMMENTS,
+  UPDATE_ME,
+  UPLOAD_BASE_URL
 };
