@@ -2,7 +2,14 @@
 
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { ChevronDown, Edit, Trash, User, X, Check } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  Edit,
+  Trash,
+  User,
+  MessageSquare,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { IComment } from '@/shared/config/api/comment/comment.model';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import comment_requests from '@/shared/config/api/comment/comment.request';
 import { Button } from '@/shared/ui/button';
 import { UPLOAD_BASE_URL } from '@/shared/config/api/URLs';
@@ -22,9 +29,12 @@ interface CommentItemProps {
 
 export default function CommentItem({ comment, meId }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [replyContent, setReplyContent] = useState('');
   const [editedContent, setEditedContent] = useState(comment.content);
   const queryClient = useQueryClient();
-  
+
   const hasLiked = comment.likes?.includes(String(meId));
   const hasDisliked = comment.dislikes?.includes(String(meId));
 
@@ -63,6 +73,7 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
     mutationFn: () => comment_requests.likeComment(comment.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({ queryKey: ['comment-replies', comment.parentId] });
     },
   });
 
@@ -71,10 +82,13 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
     mutationFn: () => comment_requests.dislikeComment(comment.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({ queryKey: ['comment-replies', comment.parentId] });
     },
   });
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
     if (hasLiked) {
       likeComment.mutate();
     } else {
@@ -85,7 +99,9 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
     }
   };
 
-  const handleDislike = () => {
+  const handleDislike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
     if (hasDisliked) {
       dislikeComment.mutate();
     } else {
@@ -93,6 +109,53 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
       if (hasLiked) {
         likeComment.mutate();
       }
+    }
+  };
+
+  const repliesQuery = useQuery({
+    queryKey: ['comment-replies', comment.id],
+    queryFn: () => comment_requests.getReplies(comment.id),
+    enabled: showReplies,
+  });
+
+  const createReply = useMutation({
+    mutationKey: ['create-reply', comment.id],
+    mutationFn: () =>
+      comment_requests.createComment({
+        postId: comment.postId,
+        content: replyContent,
+        authorId: meId,
+        parentId: comment.id,
+      }),
+    onSuccess: () => {
+      setReplyContent('');
+      setShowReplyForm(false);
+      queryClient.invalidateQueries({
+        queryKey: ['comment-replies', comment.id],
+      });
+      if (comment.parentId) {
+        queryClient.invalidateQueries({
+          queryKey: ['comment-replies', comment.parentId],
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+    },
+  });
+
+  const handleReplySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (replyContent.trim()) {
+      createReply.mutate();
+    }
+  };
+
+  const toggleReplies = () => {
+    setShowReplies(!showReplies);
+    if (!showReplies && comment.replies && comment.replies.length > 0) {
+      queryClient.prefetchQuery({
+        queryKey: ['comment-replies', comment.id],
+        queryFn: () => comment_requests.getReplies(comment.id),
+      });
     }
   };
 
@@ -153,33 +216,87 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
         )}
 
         <div className="flex items-center gap-5">
-          <button 
+          <button
             onClick={handleLike}
             disabled={likeComment.isPending || dislikeComment.isPending}
             className={`flex items-center gap-2 cursor-pointer ${hasLiked ? 'text-blue-500' : 'text-gray-400 hover:text-blue-400'}`}
           >
-            <i className={`fa-${hasLiked ? 'solid' : 'regular'} fa-thumbs-up`}></i>
+            <i
+              className={`fa-${hasLiked ? 'solid' : 'regular'} fa-thumbs-up`}
+            ></i>
             <p>{comment.likes?.length || 0}</p>
           </button>
 
-          <button 
+          <button
             onClick={handleDislike}
             disabled={likeComment.isPending || dislikeComment.isPending}
             className={`flex items-center gap-2 cursor-pointer ${hasDisliked ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}`}
           >
-            <i className={`fa-${hasDisliked ? 'solid' : 'regular'} fa-thumbs-down`}></i>
+            <i
+              className={`fa-${hasDisliked ? 'solid' : 'regular'} fa-thumbs-down`}
+            ></i>
             <p>{comment.dislikes?.length || 0}</p>
           </button>
-
-          <button className="text-sm text-gray-400 hover:text-gray-200 transition-all py-2 px-4 rounded-full cursor-pointer">
-            Javob yozish
-          </button>
         </div>
 
-        <div className="text-blue-500 cursor-pointer px-4 py-2 rounded-full hover:bg-[#333] w-max flex items-center gap-2">
-          <ChevronDown className="w-5 h-5" />
-          <span>{comment.replies?.length} ta javob</span>
-        </div>
+        {((comment.replies && comment.replies.length > 0) || showReplies) && (
+          <div
+            className="text-blue-500 cursor-pointer px-4 py-2 rounded-full hover:bg-[#333] w-max flex items-center gap-2"
+            onClick={() => setShowReplies(!showReplies)}
+          >
+            {showReplies ? (
+              <ChevronUp className="w-5 h-5" />
+            ) : (
+              <ChevronDown className="w-5 h-5" />
+            )}
+            <span>{comment.replies?.length || 0} ta javob</span>
+          </div>
+        )}
+
+        {showReplies && (
+          <div className="mt-4 pl-6 border-l-2 border-gray-700">
+            {repliesQuery.isLoading ? (
+              <div>Loading replies...</div>
+            ) : repliesQuery.data?.length > 0 ? (
+              <div className="space-y-4 mt-2">
+                {repliesQuery.data.map((reply: IComment) => (
+                  <CommentItem key={reply.id} comment={reply} meId={meId} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-400">No replies yet</p>
+            )}
+          </div>
+        )}
+
+        <button
+          onClick={() => setShowReplyForm(!showReplyForm)}
+          className="text-sm text-gray-400 cursor-pointer hover:text-blue-400 flex items-center gap-1 mt-2"
+        >
+          <MessageSquare className="w-4 h-4" />
+          <span>Javob yozish</span>
+        </button>
+
+        {showReplyForm && (
+          <form onSubmit={handleReplySubmit} className="mt-3">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={replyContent}
+                onChange={(e) => setReplyContent(e.target.value)}
+                placeholder="Javob yozing..."
+                className="flex-1 bg-gray-800 text-white rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <Button
+                type="submit"
+                size="sm"
+                disabled={createReply.isPending || !replyContent.trim()}
+              >
+                {createReply.isPending ? 'Yuborilmoqda...' : 'Yuborish'}
+              </Button>
+            </div>
+          </form>
+        )}
       </div>
 
       {comment.author.id === meId && (
