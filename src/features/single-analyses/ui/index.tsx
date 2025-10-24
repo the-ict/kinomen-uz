@@ -113,6 +113,9 @@ export default function index() {
                     fill
                     sizes="50%50"
                     className="rounded-full object-cover"
+                    onClick={() =>
+                      (window.location.href = '/single-user/' + author.data.id)
+                    }
                   />
                 </div>
                 <p className="text-gray-200">{author.data.username}</p>
@@ -166,10 +169,18 @@ export default function index() {
               fill
               sizes="50x50"
               className="rounded-full object-cover cursor-pointer"
+              onClick={() =>
+                (window.location.href = '/single-user/' + me.data?.id)
+              }
             />
           </div>
         ) : (
-          <User className="w-5 h-5" />
+          <User
+            className="w-5 h-5"
+            onClick={() =>
+              (window.location.href = '/single-user/' + me.data?.id)
+            }
+          />
         )}
         <input
           type="text"

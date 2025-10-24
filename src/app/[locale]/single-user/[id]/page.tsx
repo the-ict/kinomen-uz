@@ -67,7 +67,8 @@ function UserProfileContent() {
                 className="rounded-full h-[100px] w-[100px] object-cover"
               />
             ) : (
-              <User className="w-5 h-5" />
+              <User className="w-5 h-5"
+              />
             )}
 
             <div className="flex items-center gap-4 w-full">
