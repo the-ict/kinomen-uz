@@ -15,6 +15,8 @@ import { ResWithPagination } from '@/shared/config/api/types';
 import OMDBMovieCard from '@/widgets/movies/ui/omdb-movie-card';
 import { movie_requests } from '@/shared/config/api/movie/movie.requests';
 import { IMovie } from '@/features/create-analyses/ui';
+import { useQuery } from '@tanstack/react-query';
+import user_requests from '@/shared/config/api/user/user.requests';
 
 interface Movie {
   id: number;
@@ -64,15 +66,20 @@ export default function MoviesPage() {
 
   const years = Array.from({ length: 30 }, (_, i) => (2024 - i).toString());
 
+  const me = useQuery({
+    queryKey: ['me'],
+    queryFn: () => user_requests.getMe(),
+  })
+
+  console.log(me.data, "me")
+  
   useEffect(() => {
     setLoading(true);
-    movie_requests.filterMovie(search, year, type).then((res) => {
-      console.log(res)
+    movie_requests.filterMovie(search.toLowerCase(),year,type).then(res => {
       setFilteredMovie(res.Search);
-    });
-
+    })
     setLoading(false);
-  }, [search, year, type]);
+  }, [search,year,type]);
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="custom-container py-8">
@@ -94,7 +101,6 @@ export default function MoviesPage() {
               />
             </div>
 
-            {/* Filters */}
             <div className="flex gap-2 flex-wrap">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild className="h-10">
@@ -161,8 +167,8 @@ export default function MoviesPage() {
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-              {Array.isArray(filteredMovie) &&
-                filteredMovie.map((movie, index) => <OMDBMovieCard movie={movie} key={index}/>)}
+              {Array.isArray(filteredMovie) && me.data &&
+                filteredMovie.map((movie, index) => <OMDBMovieCard movie={movie} key={index} me={me.data} />)}
             </div>
           </>
         )}

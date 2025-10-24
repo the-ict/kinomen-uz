@@ -1,5 +1,5 @@
 import httpClient from '../httpClient';
-import { MY_POSTS, POSTS } from '../URLs';
+import { MY_POSTS, POSTS, SEARCH_MOVIE } from '../URLs';
 import { IPost, PostBodyModel } from './posts.model';
 
 const post_requests = {
@@ -23,6 +23,9 @@ const post_requests = {
   },
   getMyPosts: async (): Promise<IPost[]> => {
     return (await httpClient.get(MY_POSTS)).data;
+  },
+  searchMovie: async (movieName: string) => {
+    return (await httpClient.post(SEARCH_MOVIE, { movieName })).data;
   },
 };
 

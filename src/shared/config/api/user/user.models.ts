@@ -1,5 +1,5 @@
 import { CommentBodyModel } from '../comment/comment.model';
-import { PostBodyModel } from '../posts/posts.model';
+import { IPost, PostBodyModel } from '../posts/posts.model';
 
 export interface UserBodyModels {
   id?: number;
@@ -8,7 +8,7 @@ export interface UserBodyModels {
   password: string;
   name?: string;
   about?: string;
-  posts?: PostBodyModel[];
+  posts?: IPost[];
   comments?: CommentBodyModel[];
   followers: string[];
   followings: string[];
@@ -34,16 +34,15 @@ export interface UpdateBodyModel {
   imageUrl?: string;
 }
 
-
 export interface ProfileBodyModel {
-    user: {
-        id: number;
-        name?: string;
-        username: string;
-        imageUrl: string;
-    };
-    followers: string[];
-    followings: string[];
-    followersCount: number;
-    followingsCount: number;
+  user: {
+    id: number;
+    name?: string;
+    username: string;
+    imageUrl: string;
+  };
+  followers: string[];
+  followings: string[];
+  followersCount: number;
+  followingsCount: number;
 }

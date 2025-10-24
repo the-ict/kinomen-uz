@@ -15,6 +15,9 @@ const movie_requests = {
   },
   filterMovie: async(title: string, y?: string, type?: string):Promise<OMDBSearchResonse> => {
     return (await axios.get(OBDM_BASE_URL + `?apikey=${OBDM_API_KEY}&s=${title}&y=${y}&plot=full&type=${type}`)).data;
+  },
+  getMovieByid: async(id: string) => {
+    return (await axios.get(OBDM_BASE_URL + `?apikey=${OBDM_API_KEY}&i=${id}`)).data;
   }
 };
 

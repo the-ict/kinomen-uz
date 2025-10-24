@@ -5,9 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import AnalysesListCard from '@/features/analyses/ui/AnalysesListCard';
 import CommentItem from '@/features/single-analyses/ui/CommentItem';
-import MovieCard from '@/widgets/movies/ui/movie-card';
 import { useQuery } from '@tanstack/react-query';
-import post_requests from '@/shared/config/api/posts/posts.request';
 import comment_requests from '@/shared/config/api/comment/comment.request';
 import user_requests from '@/shared/config/api/user/user.requests';
 import { Edit, User } from 'lucide-react';
@@ -15,6 +13,7 @@ import { EditProfileDialog } from '@/features/user-profile/ui';
 import { Button } from '@/shared/ui/button';
 import { UPLOAD_BASE_URL } from '@/shared/config/api/URLs';
 import { useParams } from 'next/navigation';
+import IMDBIdMovie from '@/widgets/imdbIdMovie/ui';
 
 function UserProfileContent() {
   const params = useParams();
@@ -24,11 +23,6 @@ function UserProfileContent() {
   >('analyses');
 
   const activeTabStyle = 'border-b-2 border-gray-200 cursor-pointer';
-
-  const posts = useQuery({
-    queryKey: ['my-posts'],
-    queryFn: () => post_requests.getMyPosts(),
-  });
 
   const comments = useQuery({
     queryKey: ['my-comments'],
@@ -42,8 +36,6 @@ function UserProfileContent() {
 
   const userId = Number(params.id);
   const isCurrentUser = me.data?.id === userId;
-
-  const imageUrl = me.data?.imageUrl ? UPLOAD_BASE_URL + me.data.imageUrl : null;
 
   return (
     <section className="min-h-screen">
@@ -94,6 +86,10 @@ function UserProfileContent() {
                   </EditProfileDialog>
                 </div>
               )}
+
+              <button className="text-red-400 transition hover:text-red-600 text-sm cursor-pointer">
+                Chiqish
+              </button>
             </div>
           </div>
         </div>
@@ -124,22 +120,16 @@ function UserProfileContent() {
             >
               Watchlist
             </TabsTrigger>
-            <TabsTrigger
-              onClick={() => setActiveTab('favorites')}
-              value="favorites"
-              className={`cursor-pointer  py-2 px-5 mb-3 ml-5 ${activeTab === 'favorites' ? activeTabStyle : ''}`}
-            >
-              Favorites
-            </TabsTrigger>
 
             <TabsContent value="analyses" className="grid grid-cols-4 gap-5">
-              {posts.data?.map((item) => (
-                <AnalysesListCard
-                  key={item.id}
-                  analyses={item}
-                  isOwner={me.data?.id == item.authorId}
-                />
-              ))}
+              {Array.isArray(me.data?.posts) &&
+                me.data.posts.map((item) => (
+                  <AnalysesListCard
+                    key={item.id}
+                    analyses={item}
+                    isOwner={me.data?.id == item.authorId}
+                  />
+                ))}
             </TabsContent>
             <TabsContent value="replies">
               {Array.isArray(comments.data) &&
@@ -152,15 +142,14 @@ function UserProfileContent() {
                 ))}
             </TabsContent>
             <TabsContent value="watchlist" className="grid grid-cols-6 gap-10">
-              {Array.isArray(posts.data) &&
-                posts.data.map((item) => (
-                  <MovieCard key={item.id} movie={item} />
-                ))}
-            </TabsContent>
-            <TabsContent value="favorites" className="grid grid-cols-6 gap-10">
-              {Array.isArray(posts.data) &&
-                posts.data.map((item) => (
-                  <MovieCard key={item.id} movie={item} />
+              {Array.isArray(me.data?.watchlist) &&
+                me.data &&
+                me.data.watchlist.map((item) => (
+                  <IMDBIdMovie
+                    key={item}
+                    movieId={item}
+                    me={me.data}
+                  />
                 ))}
             </TabsContent>
           </TabsList>
