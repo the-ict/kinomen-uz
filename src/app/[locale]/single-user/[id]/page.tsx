@@ -14,9 +14,12 @@ import { Button } from '@/shared/ui/button';
 import { UPLOAD_BASE_URL } from '@/shared/config/api/URLs';
 import { useParams } from 'next/navigation';
 import IMDBIdMovie from '@/widgets/imdbIdMovie/ui';
+import { useStore } from '@/shared/store';
 
 function UserProfileContent() {
   const params = useParams();
+
+  const userStore = useStore();
 
   const [activeTab, setActiveTab] = useState<
     'analyses' | 'favorites' | 'watchlist' | 'replies'
@@ -87,7 +90,10 @@ function UserProfileContent() {
                 </div>
               )}
 
-              <button className="text-red-400 transition hover:text-red-600 text-sm cursor-pointer">
+              <button onClick={() => {
+                userStore.setToken("");
+                window.location.replace("/login")
+              }} className="text-red-400 transition hover:text-red-600 text-sm cursor-pointer">
                 Chiqish
               </button>
             </div>
