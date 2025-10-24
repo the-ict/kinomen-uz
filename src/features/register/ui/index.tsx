@@ -85,8 +85,8 @@ export default function Register() {
           type="password"
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Button 
-          onClick={handleSubmit} 
+        <Button
+          onClick={handleSubmit}
           type="submit"
           disabled={register.isPending}
           className="min-w-[150px]"
@@ -96,7 +96,9 @@ export default function Register() {
               <Loading size="sm" variant="secondary" />
               <span>Yuklanmoqda...</span>
             </div>
-          ) : "Ro'hatdan o'tish"}
+          ) : (
+            "Ro'hatdan o'tish"
+          )}
         </Button>
 
         <div className="flex items-center justify-center gap-2 text-center text-sm">

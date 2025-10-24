@@ -159,14 +159,14 @@ export default function index() {
 
       <div className="mt-10 w-full flex items-end justify-between gap-5 border-b py-3">
         {me.data?.imageUrl ? (
-          <div className='relative w-10 h-10'>
+          <div className="relative w-10 h-10">
             <Image
-            src={UPLOAD_BASE_URL +  me.data?.imageUrl}
-            alt="What up"
-            fill
-            sizes='50x50'
-            className="rounded-full object-cover cursor-pointer"
-          />
+              src={UPLOAD_BASE_URL + me.data?.imageUrl}
+              alt="What up"
+              fill
+              sizes="50x50"
+              className="rounded-full object-cover cursor-pointer"
+            />
           </div>
         ) : (
           <User className="w-5 h-5" />

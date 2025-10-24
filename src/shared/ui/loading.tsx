@@ -21,7 +21,7 @@ const loadingVariants = cva(
       size: 'default',
       variant: 'primary',
     },
-  }
+  },
 );
 
 interface LoadingProps
@@ -51,7 +51,9 @@ export function Loading({
       >
         <span className="sr-only">{text}</span>
       </div>
-      {withText && <span className="text-sm text-muted-foreground">{text}</span>}
+      {withText && (
+        <span className="text-sm text-muted-foreground">{text}</span>
+      )}
     </div>
   );
 }

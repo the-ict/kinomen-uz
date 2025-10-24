@@ -8,14 +8,16 @@ const mockMovies: IMovie[] = [
     Year: '1999',
     imdbID: 'tt0133093',
     Type: 'movie',
-    Poster: 'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg',
+    Poster:
+      'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg',
   },
   {
     Title: 'Tenet',
     Year: '2020',
     imdbID: 'tt6723592',
     Type: 'movie',
-    Poster: 'https://m.media-amazon.com/images/M/MV5BYzg0NGM2NjQtZjgzZi00MmQ2LWE5MzYtNGY0YTgxOWQ4NmIxXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg',
+    Poster:
+      'https://m.media-amazon.com/images/M/MV5BYzg0NGM2NjQtZjgzZi00MmQ2LWE5MzYtNGY0YTgxOWQ4NmIxXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg',
   },
 ];
 

@@ -17,9 +17,9 @@ const ME = '/users/profile/get-by-token/me';
 const UPDATE_ME = '/users/profile/update-me';
 const DISCUSSED_MOVIES = '/posts/discussed/most';
 const MY_POSTS = '/posts/get-by-token/me';
-const MY_COMMENTS = "/comments/get-by-token/me"
-const SEARCH_MOVIE = "/posts/search/movie"
-const USER_FAVORITES = "/users/favorite/"
+const MY_COMMENTS = '/comments/get-by-token/me';
+const SEARCH_MOVIE = '/posts/search/movie';
+const USER_FAVORITES = '/users/favorite/';
 
 export {
   BASE_URL,
@@ -40,5 +40,5 @@ export {
   UPDATE_ME,
   UPLOAD_BASE_URL,
   SEARCH_MOVIE,
-  USER_FAVORITES
+  USER_FAVORITES,
 };

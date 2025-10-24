@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 function CommunitySection() {
   return (
@@ -8,7 +8,10 @@ function CommunitySection() {
         Fikrlaringizni yozing, izoh bering, boshqa kinosevarlar bilan suhbat
         quring.
       </p>
-      <Link href={"/register"} className="px-8 py-3 rounded-xl cursor-pointer bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-medium shadow-lg">
+      <Link
+        href={'/register'}
+        className="px-8 py-3 rounded-xl cursor-pointer bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-medium shadow-lg"
+      >
         Jamoaga qo‘shilish
       </Link>
     </section>

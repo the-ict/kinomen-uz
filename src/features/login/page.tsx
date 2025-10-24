@@ -67,8 +67,16 @@ export default function Login() {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button onClick={handleSubmit} disabled={login.isPending} className="min-w-[100px]">
-          {login.isPending ? <Loading size="sm" variant="secondary" /> : 'Kirish'}
+        <Button
+          onClick={handleSubmit}
+          disabled={login.isPending}
+          className="min-w-[100px]"
+        >
+          {login.isPending ? (
+            <Loading size="sm" variant="secondary" />
+          ) : (
+            'Kirish'
+          )}
         </Button>
 
         <div className="flex items-center justify-center gap-2 text-center text-sm">

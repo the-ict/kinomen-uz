@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import post_requests from '@/shared/config/api/posts/posts.request';
 import user_requests from '@/shared/config/api/user/user.requests';
 
-export default function index() {
+export default function AnalysesList() {
   const analyses = useQuery({
     queryKey: ['analyses'],
     queryFn: () => post_requests.getAll(),
@@ -30,9 +30,7 @@ export default function index() {
             />
           ))}
       </div>
-      {
-        me.data && <Followings me={me.data}/>
-      }
+      {me.data && <Followings me={me.data} />}
     </div>
   );
 }

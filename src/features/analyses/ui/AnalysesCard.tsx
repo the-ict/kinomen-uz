@@ -7,10 +7,10 @@ export default function AnalysesCard() {
   return (
     <section className="relative h-[500px] cursor-pointer">
       <div className="relative h-[500px] rounded-xl overflow-hidden">
-        <Image 
-          src={AnalysisCardImage.src} 
-          alt="Analyses" 
-          fill 
+        <Image
+          src={AnalysisCardImage.src}
+          alt="Analyses"
+          fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>

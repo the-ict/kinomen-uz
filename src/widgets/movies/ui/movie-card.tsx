@@ -15,7 +15,10 @@ interface MovieCardProps {
 export default function MovieCard({ movie, type = 'home' }: MovieCardProps) {
   return (
     <div className="bg-[#141414] border border-white/10 rounded-2xl overflow-hidden cursor-pointer group hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(229,9,20,0.2)] transition-all duration-300">
-      <div className="relative w-full h-[250px]" onClick={() => window.location.href = `/analyses/${movie.id}`}>
+      <div
+        className="relative w-full h-[250px]"
+        onClick={() => (window.location.href = `/analyses/${movie.id}`)}
+      >
         <Image
           src={movie.imageUrl || MoviePoster.src}
           alt={movie.title}
@@ -24,7 +27,7 @@ export default function MovieCard({ movie, type = 'home' }: MovieCardProps) {
           className="object-cover"
         />
 
-        <div className='absolute top-4 right-2 px-3 py-2 cursor-pointer bg-yellow-400 rounded text-black font-bold'>
+        <div className="absolute top-4 right-2 px-3 py-2 cursor-pointer bg-yellow-400 rounded text-black font-bold">
           {movie.movie}
         </div>
 

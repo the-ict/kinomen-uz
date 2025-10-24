@@ -145,11 +145,7 @@ function UserProfileContent() {
               {Array.isArray(me.data?.watchlist) &&
                 me.data &&
                 me.data.watchlist.map((item) => (
-                  <IMDBIdMovie
-                    key={item}
-                    movieId={item}
-                    me={me.data}
-                  />
+                  <IMDBIdMovie key={item} movieId={item} me={me.data} />
                 ))}
             </TabsContent>
           </TabsList>

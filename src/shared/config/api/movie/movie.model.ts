@@ -9,9 +9,9 @@ interface SearchMovieResponse {
 
 interface OMDBSearchResonse {
   Response: string;
-  Search: IMovie[],
+  Search: IMovie[];
   totalResults: string;
   Error?: string;
 }
 
-export type { SearchMovieResponse,OMDBSearchResonse };
+export type { SearchMovieResponse, OMDBSearchResonse };

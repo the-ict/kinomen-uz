@@ -1,4 +1,4 @@
-import { IAuthor, IPost } from '../posts/posts.model';
+import { IPost } from '../posts/posts.model';
 import { UserBodyModels } from '../user/user.models';
 
 export interface CommentBodyModel {

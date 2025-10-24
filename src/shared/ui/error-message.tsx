@@ -13,7 +13,7 @@ export function ErrorMessage({ message, className }: ErrorMessageProps) {
     <div
       className={cn(
         'bg-destructive/15 text-destructive dark:text-red-400 text-sm p-3 rounded-md flex items-start gap-2',
-        className
+        className,
       )}
       role="alert"
     >

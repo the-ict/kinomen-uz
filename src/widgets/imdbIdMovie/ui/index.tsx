@@ -2,9 +2,7 @@
 
 import Image from 'next/image';
 import React from 'react';
-import {
-  AlignVerticalDistributeEndIcon,
-} from 'lucide-react';
+import { AlignVerticalDistributeEndIcon } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import user_requests from '@/shared/config/api/user/user.requests';
@@ -67,11 +65,11 @@ export default function IMDBIdMovie({ movieId, me }: IMDBIdMovieProps) {
             {Array.isArray(me?.watchlist) &&
             me.watchlist.includes(String(movie.imdbID)) ? (
               <p className="flex items-center gap-2">
-                <AlignVerticalDistributeEndIcon /> Watchlistdan o'chirish
+                <AlignVerticalDistributeEndIcon /> Watchlistdan o&apos;chirish
               </p>
             ) : (
               <p className="flex items-center gap-2">
-                <AlignVerticalDistributeEndIcon /> Watchlistga qo'shish
+                <AlignVerticalDistributeEndIcon /> Watchlistga qo&apos;shish
               </p>
             )}
           </Button>

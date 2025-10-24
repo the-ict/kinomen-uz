@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { ChevronDown, Search,  } from 'lucide-react';
+import { ChevronDown, Search } from 'lucide-react';
 import httpClient from '@/shared/config/api/httpClient';
 import { ResWithPagination } from '@/shared/config/api/types';
 import OMDBMovieCard from '@/widgets/movies/ui/omdb-movie-card';
@@ -62,24 +62,24 @@ export default function MoviesPage() {
   const [year, setYear] = useState<string>('');
   const [filteredMovie, setFilteredMovie] = useState<IMovie[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [type, setType] = useState<"movie" | "series" | "episode" | "">("")
+  const [type, setType] = useState<'movie' | 'series' | 'episode' | ''>('');
 
   const years = Array.from({ length: 30 }, (_, i) => (2024 - i).toString());
 
   const me = useQuery({
     queryKey: ['me'],
     queryFn: () => user_requests.getMe(),
-  })
+  });
 
-  console.log(me.data, "me")
-  
+  console.log(me.data, 'me');
+
   useEffect(() => {
     setLoading(true);
-    movie_requests.filterMovie(search.toLowerCase(),year,type).then(res => {
+    movie_requests.filterMovie(search.toLowerCase(), year, type).then((res) => {
       setFilteredMovie(res.Search);
-    })
+    });
     setLoading(false);
-  }, [search,year,type]);
+  }, [search, year, type]);
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="custom-container py-8">
@@ -145,10 +145,12 @@ export default function MoviesPage() {
                   >
                     Hammasi
                   </DropdownMenuItem>
-                  {["movie", "series", "episode"].map((y) => (
+                  {['movie', 'series', 'episode'].map((y) => (
                     <DropdownMenuItem
                       key={y}
-                      onClick={() => setType(y as "movie" | "series" | "episode")}
+                      onClick={() =>
+                        setType(y as 'movie' | 'series' | 'episode')
+                      }
                       className="text-white cursor-pointer hover:bg-gray-700"
                     >
                       {y}
@@ -167,8 +169,11 @@ export default function MoviesPage() {
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-              {Array.isArray(filteredMovie) && me.data &&
-                filteredMovie.map((movie, index) => <OMDBMovieCard movie={movie} key={index} me={me.data} />)}
+              {Array.isArray(filteredMovie) &&
+                me.data &&
+                filteredMovie.map((movie, index) => (
+                  <OMDBMovieCard movie={movie} key={index} me={me.data} />
+                ))}
             </div>
           </>
         )}

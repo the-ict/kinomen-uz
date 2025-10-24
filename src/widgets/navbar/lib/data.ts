@@ -1,14 +1,10 @@
 import {
   Film,
   Star,
-  Users,
   BookOpen,
   HelpCircle,
   MessageSquare,
   Info,
-  LogIn,
-  Clapperboard,
-  Sparkles,
 } from 'lucide-react';
 import { MenuItem } from './model';
 import { LanguageRoutes } from '@/shared/config/i18n/types';

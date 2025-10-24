@@ -10,15 +10,25 @@ const movie_requests = {
       await axios.get(OBDM_BASE_URL + `?apikey=${OBDM_API_KEY}&s=${movieName}`)
     ).data;
   },
-  getPopulerMovies: async():Promise<IPost[]> => {
+  getPopulerMovies: async (): Promise<IPost[]> => {
     return (await httpClient(DISCUSSED_MOVIES)).data;
   },
-  filterMovie: async(title: string, y?: string, type?: string):Promise<OMDBSearchResonse> => {
-    return (await axios.get(OBDM_BASE_URL + `?apikey=${OBDM_API_KEY}&s=${title}&y=${y}&plot=full&type=${type}`)).data;
+  filterMovie: async (
+    title: string,
+    y?: string,
+    type?: string,
+  ): Promise<OMDBSearchResonse> => {
+    return (
+      await axios.get(
+        OBDM_BASE_URL +
+          `?apikey=${OBDM_API_KEY}&s=${title}&y=${y}&plot=full&type=${type}`,
+      )
+    ).data;
   },
-  getMovieByid: async(id: string) => {
-    return (await axios.get(OBDM_BASE_URL + `?apikey=${OBDM_API_KEY}&i=${id}`)).data;
-  }
+  getMovieByid: async (id: string) => {
+    return (await axios.get(OBDM_BASE_URL + `?apikey=${OBDM_API_KEY}&i=${id}`))
+      .data;
+  },
 };
 
 export { movie_requests };

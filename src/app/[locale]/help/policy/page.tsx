@@ -91,7 +91,7 @@ export default function PrivacyPage() {
               <span className="text-orange-600 dark:text-orange-400 font-medium">
                 privacy@kinomen.com
               </span>{' '}
-              manzili orqali bog‘lanishingiz mumkin.
+              manzili orqali bog&apos;lanishingiz mumkin.
             </p>
           </section>
         </div>

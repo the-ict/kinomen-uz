@@ -113,14 +113,14 @@ const Navbar = () => {
               </Button>
             </div>
           ) : me.data?.imageUrl ? (
-            <div className='relative w-10 h-10'>
+            <div className="relative w-10 h-10">
               <Image
                 src={UPLOAD_BASE_URL + me.data?.imageUrl || ''}
                 onClick={() =>
                   (window.location.href = '/single-user/' + me.data?.id)
                 }
                 fill
-                sizes='50x50'
+                sizes="50x50"
                 alt="What up"
                 className="rounded-full object-cover cursor-pointer"
               />

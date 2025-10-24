@@ -73,7 +73,9 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
     mutationFn: () => comment_requests.likeComment(comment.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
-      queryClient.invalidateQueries({ queryKey: ['comment-replies', comment.parentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['comment-replies', comment.parentId],
+      });
     },
   });
 
@@ -82,13 +84,15 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
     mutationFn: () => comment_requests.dislikeComment(comment.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
-      queryClient.invalidateQueries({ queryKey: ['comment-replies', comment.parentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['comment-replies', comment.parentId],
+      });
     },
   });
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     if (hasLiked) {
       likeComment.mutate();
     } else {
@@ -101,7 +105,7 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
 
   const handleDislike = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     if (hasDisliked) {
       dislikeComment.mutate();
     } else {
