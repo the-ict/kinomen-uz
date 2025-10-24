@@ -13,6 +13,7 @@ import { IComment } from '@/shared/config/api/comment/comment.model';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import comment_requests from '@/shared/config/api/comment/comment.request';
 import { Button } from '@/shared/ui/button';
+import { UPLOAD_BASE_URL } from '@/shared/config/api/URLs';
 
 interface CommentItemProps {
   comment: IComment;
@@ -23,6 +24,9 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const queryClient = useQueryClient();
+  
+  const hasLiked = comment.likes?.includes(String(meId));
+  const hasDisliked = comment.dislikes?.includes(String(meId));
 
   const updateComment = useMutation({
     mutationKey: ['update-comment', comment.id],
@@ -54,11 +58,49 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
     }
   };
 
+  const likeComment = useMutation({
+    mutationKey: ['like-comment', comment.id],
+    mutationFn: () => comment_requests.likeComment(comment.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+    },
+  });
+
+  const dislikeComment = useMutation({
+    mutationKey: ['dislike-comment', comment.id],
+    mutationFn: () => comment_requests.dislikeComment(comment.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+    },
+  });
+
+  const handleLike = () => {
+    if (hasLiked) {
+      likeComment.mutate();
+    } else {
+      likeComment.mutate();
+      if (hasDisliked) {
+        dislikeComment.mutate();
+      }
+    }
+  };
+
+  const handleDislike = () => {
+    if (hasDisliked) {
+      dislikeComment.mutate();
+    } else {
+      dislikeComment.mutate();
+      if (hasLiked) {
+        likeComment.mutate();
+      }
+    }
+  };
+
   return (
     <div className="mt-5 w-full flex items-start gap-5">
       {comment.author.imageUrl ? (
         <Image
-          src={comment.author.imageUrl}
+          src={UPLOAD_BASE_URL + comment.author.imageUrl}
           alt="Profile"
           width={50}
           height={50}
@@ -100,7 +142,7 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
                 size="sm"
                 className="cursor-pointer"
               >
-                Cancel
+                Bekor qilish
               </Button>
             </div>
           </div>
@@ -111,19 +153,25 @@ export default function CommentItem({ comment, meId }: CommentItemProps) {
         )}
 
         <div className="flex items-center gap-5">
-          <button className="flex items-center gap-2 cursor-pointer">
-            <i className="fa-regular fa-thumbs-up"></i>
-
-            <p>{comment.likes.length}</p>
+          <button 
+            onClick={handleLike}
+            disabled={likeComment.isPending || dislikeComment.isPending}
+            className={`flex items-center gap-2 cursor-pointer ${hasLiked ? 'text-blue-500' : 'text-gray-400 hover:text-blue-400'}`}
+          >
+            <i className={`fa-${hasLiked ? 'solid' : 'regular'} fa-thumbs-up`}></i>
+            <p>{comment.likes?.length || 0}</p>
           </button>
 
-          <button className="flex items-center gap-2 cursor-pointer">
-            <i className="fa-regular fa-thumbs-down"></i>
-
-            <p>{comment.likes.length}</p>
+          <button 
+            onClick={handleDislike}
+            disabled={likeComment.isPending || dislikeComment.isPending}
+            className={`flex items-center gap-2 cursor-pointer ${hasDisliked ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}`}
+          >
+            <i className={`fa-${hasDisliked ? 'solid' : 'regular'} fa-thumbs-down`}></i>
+            <p>{comment.dislikes?.length || 0}</p>
           </button>
 
-          <button className="hover:bg-[#333] transition-all py-2 px-5 rounded-full cursor-pointer">
+          <button className="text-sm text-gray-400 hover:text-gray-200 transition-all py-2 px-4 rounded-full cursor-pointer">
             Javob yozish
           </button>
         </div>

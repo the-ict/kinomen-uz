@@ -10,6 +10,7 @@ import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import post_requests from '@/shared/config/api/posts/posts.request';
 import user_requests from '@/shared/config/api/user/user.requests';
 import comment_requests from '@/shared/config/api/comment/comment.request';
+import { UPLOAD_BASE_URL } from '@/shared/config/api/URLs';
 
 export default function index() {
   const [commentText, setCommentText] = React.useState<string>('');
@@ -42,10 +43,6 @@ export default function index() {
     select: (data) => data.reverse(),
   });
 
-  useEffect(() => {
-    console.log(comments.data);
-  }, [comments.data]);
-
   const createComment = useMutation({
     mutationKey: ['create-comment'],
     mutationFn: () =>
@@ -60,11 +57,35 @@ export default function index() {
     },
   });
 
+  const followUser = useMutation({
+    mutationKey: ['follow-user'],
+    mutationFn: () => user_requests.followUser(Number(params.id) || 1),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    },
+  });
+
+  const likePost = useMutation({
+    mutationKey: ['like-post'],
+    mutationFn: () => post_requests.likePost(Number(params.id) || 1),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['single-post'] });
+    },
+  });
+
   const handleCreateComment = () => {
     console.log(commentText, 'comment text');
     if (commentText.trim() === '') return;
 
     createComment.mutate();
+  };
+
+  const handleFollow = () => {
+    followUser.mutate();
+  };
+
+  const handleLike = () => {
+    likePost.mutate();
   };
 
   return (
@@ -85,14 +106,16 @@ export default function index() {
           <div className="flex items-center justify-between gap-5">
             {author.data?.imageUrl ? (
               <div className="flex items-center gap-2 cursor-pointer">
-                <Image
-                  src={author.data.imageUrl}
-                  alt="What up"
-                  width={50}
-                  height={50}
-                  className="rounded-full object-cover"
-                />
-                <p className="font-semibold">{author.data?.username}</p>
+                <div className="relative w-10 h-10">
+                  <Image
+                    src={UPLOAD_BASE_URL + author.data.imageUrl}
+                    alt="What up"
+                    fill
+                    sizes="50%50"
+                    className="rounded-full object-cover"
+                  />
+                </div>
+                <p className="text-gray-200">{author.data.username}</p>
               </div>
             ) : (
               <div className="flex items-center gap-2 cursor-pointer">
@@ -101,15 +124,27 @@ export default function index() {
               </div>
             )}
 
-            <div>
-              <p className="text-sm text-gray-200 w-[70%]">
-                {author.data?.about}
-              </p>
-            </div>
+            <div className="flex gap-10 items-center cursor-pointer">
+              {me.data?.id != author.data?.id && (
+                <button
+                  onClick={handleFollow}
+                  className="outline-none text-blue-400 hover:text-blue-500 cursor-pointer text-sm transition"
+                >
+                  Obuna bo'lish
+                </button>
+              )}
 
-            <div className="flex flex-col gap-2 items-center cursor-pointer">
-              <Heart className="w-5 h-5" />
-              <p className="text-sm">{singlePost.data?.likes.length}</p>
+              <div className="flex items-center gap-2 cursor-pointer">
+                {singlePost.data?.likes.includes(String(me.data?.id)) ? (
+                  <Heart
+                    className="w-5 h-5 text-red-500"
+                    onClick={handleLike}
+                  />
+                ) : (
+                  <Heart className="w-5 h-5" onClick={handleLike} />
+                )}
+                <p className="text-sm">{singlePost.data?.likes.length}</p>
+              </div>
             </div>
           </div>
 
@@ -124,13 +159,15 @@ export default function index() {
 
       <div className="mt-10 w-full flex items-end justify-between gap-5 border-b py-3">
         {me.data?.imageUrl ? (
-          <Image
-            src={me.data.imageUrl}
+          <div className='relative w-10 h-10'>
+            <Image
+            src={UPLOAD_BASE_URL +  me.data?.imageUrl}
             alt="What up"
-            width={50}
-            height={50}
+            fill
+            sizes='50x50'
             className="rounded-full object-cover cursor-pointer"
           />
+          </div>
         ) : (
           <User className="w-5 h-5" />
         )}
@@ -143,7 +180,7 @@ export default function index() {
         />
         <button
           onClick={handleCreateComment}
-          className="bg-blue-500 font-semibold hover:bg-blue-700 transition-all py-2 px-10 rounded-full cursor-pointer"
+          className="bg-blue-500 text-[11px] font-semibold hover:bg-blue-700 transition-all py-2 px-10 rounded-full cursor-pointer"
         >
           Yaratish
         </button>

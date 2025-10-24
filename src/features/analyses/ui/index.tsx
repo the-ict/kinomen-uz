@@ -30,7 +30,9 @@ export default function index() {
             />
           ))}
       </div>
-      <Followings />
+      {
+        me.data && <Followings me={me.data}/>
+      }
     </div>
   );
 }

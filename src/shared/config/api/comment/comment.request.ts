@@ -20,7 +20,13 @@ const comment_requests = {
   },
   geyMyComments: async() => {
     return (await httpClient.get(MY_COMMENTS)).data;
-  } 
+  },
+  likeComment: async (commentId: number) => {
+    return (await httpClient.post(`${COMMENTS}${commentId}/like`)).data;
+  },
+  dislikeComment: async (commentId: number) => {
+    return (await httpClient.post(`${COMMENTS}${commentId}/dislike`)).data;
+  }
 };
 
 export default comment_requests;

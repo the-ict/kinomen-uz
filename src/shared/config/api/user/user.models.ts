@@ -33,3 +33,17 @@ export interface UpdateBodyModel {
   coverImage?: string;
   imageUrl?: string;
 }
+
+
+export interface ProfileBodyModel {
+    user: {
+        id: number;
+        name?: string;
+        username: string;
+        imageUrl: string;
+    };
+    followers: string[];
+    followings: string[];
+    followersCount: number;
+    followingsCount: number;
+}

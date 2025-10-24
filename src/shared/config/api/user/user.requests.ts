@@ -6,7 +6,7 @@ import {
   ME,
   WATCHLIST,
 } from '../URLs';
-import type { UserBodyModels } from './user.models';
+import type { ProfileBodyModel, UserBodyModels } from './user.models';
 
 const user_requests = {
   checkUsername: async (username: string) => {
@@ -32,6 +32,10 @@ const user_requests = {
   },
   getMe: async (): Promise<UserBodyModels> => {
     return (await httpClient.get(ME)).data;
+  },
+  getFollowings: async (id:number): Promise<ProfileBodyModel> => {
+    console.log(id, "id")
+    return (await httpClient.get(GET_PROFILE + id + '/follows')).data;
   },
 };
 
